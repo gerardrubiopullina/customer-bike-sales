@@ -150,10 +150,125 @@ sil
 
 # Partitioning Around Medoids (PAM): Clustering algorithm
 
+pam = pam(gower_df, diss = TRUE, k = 3)
 
+pam_summary <- df_clean %>%
+  mutate(Cluster = pam$clustering) %>%
+  group_by(Cluster) %>%
+  do(Cluster_summary = summary(.))
 
+table(pam$clustering)
+
+# The cluster 2 is the most common with 2000 customers
+
+pam_summary$Cluster_summary[[2]]
+
+# This cluster has 1245 women (F) and 755 males (M)
+# Clear majority of single (S) people
+# Their age is around their 30s - 40s
+# Average income of 64785$ with a range between 25k and 138k
+
+# Graphical representation of distances with TSNE. Customers dissimilarities
+tsne_object <- Rtsne(gower_df, is_distance = TRUE)
+
+tsne_df <- tsne_object$Y %>%
+  data.frame() %>%
+  setNames(c("X", "Y")) %>%
+  mutate(cluster = factor(pam$clustering))
+
+ggplot(aes(x = X, y = Y), data = tsne_df) +
+  geom_point(aes(color = cluster)) +
+  scale_color_manual(values = c("#008080", "#003366", "#FF7F0E")) +
+  theme_minimal() +
+  theme(
+    legend.title = element_blank(),
+    legend.position = "right",
+    legend.key = element_blank(),
+    panel.grid.major = element_blank(),
+    axis.title = element_blank(),
+  )
+
+# Bind results with the database sample
+df_final <- bind_cols(data, pam['clustering'])
+df_final$clustering <- as.factor(df_final$clustering)
+
+prop.table(table(df_final$clustering, df_final$BikeBuyer), 1)
+
+# If we want to run a campaign promoting bike purchases, we should focus on
+# cluster 3 and 1 as they have a high percentage of bike buyers
+
+####
+#### Customer groups analysis ####
+
+cluster1 <- filter(df_final, clustering==1)
+cluster2 <- filter(df_final, clustering==2)
+cluster3 <- filter(df_final, clustering==3)
+
+age_clusters <- ggplot(df_final, aes(x=Age, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Age") +
+  theme(legend.position = "none")
+
+country_clusters <- ggplot(df_final, aes(x=CountryRegionName, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Country") +
+  theme(legend.position = "none")
+
+education_clusters <- ggplot(df_final, aes(x=Education, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Education") +
+  coord_flip() +
+  theme(legend.position = "none")
+
+occupation_clusters <- ggplot(df_final, aes(x=Occupation, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Occupation") +
+  theme(legend.position = "none")
+
+marital_clusters <- ggplot(df_final, aes(x=MaritalStatus, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Marital Status") +
+  theme(legend.position = "none")
+
+owner_clusters <- ggplot(df_final, aes(x=HomeOwnerFlag, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Home Owner Flag") +
+  theme(legend.position = "none")
+
+cars_clusters <- ggplot(df_final, aes(x=NumberCarsOwned, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Number Cars Owned") +
+  theme(legend.position = "none")
+
+childrenhome_clusters <- ggplot(df_final, aes(x=NumberChildrenAtHome, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Number Children At Home") +
+  theme(legend.position = "none")
+
+childrentotal_clusters <- ggplot(df_final, aes(x=TotalChildren, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Total Children") +
+  theme(legend.position = "none")
+
+# Panel: Customer groups analysis
+ggarrange(
+  age_clusters, country_clusters, education_clusters, occupation_clusters,
+  marital_clusters, owner_clusters, cars_clusters, childrenhome_clusters,
+  childrentotal_clusters,
+  labels = c(""),
+  ncol = 3, nrow = 3,
+  common.legend = TRUE, legend = "bottom"
+)
 
 ####
 
-
-
+# The conclusions for this analysis will be showed in the CONCLUSIONS.md
