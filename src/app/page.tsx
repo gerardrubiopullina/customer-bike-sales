@@ -2,6 +2,7 @@ import CustomersList from "@/components/CustomersList";
 import MetricCard from "@/components/MetricCard";
 import { Groups2, PedalBike, Troubleshoot } from "@mui/icons-material";
 
+
 export default function Home() {
 
   const metrics = {
@@ -42,3 +43,6 @@ export default function Home() {
     </div>
   );
 }
+
+//TODO: use page.tsx as a layout with {children}
+//TODO: handle data fetching in a hook/generic function
