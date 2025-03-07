@@ -328,3 +328,78 @@ write.csv(results, "clustering_results.csv", row.names = FALSE)
 write_json(results, "../../public/clustering_results.json", pretty = TRUE)
 
 ####
+#### View full clusters distribution ####
+
+results_cluster1 <- filter(results, clustering==1)
+results_cluster2 <- filter(results, clustering==2)
+results_cluster3 <- filter(results, clustering==3)
+
+results_age_clusters <- ggplot(results, aes(x=Age, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Age") +
+  theme(legend.position = "none")
+
+results_country_clusters <- ggplot(results, aes(x=CountryRegionName, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Country") +
+  theme(legend.position = "none")
+
+results_education_clusters <- ggplot(results, aes(x=Education, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Education") +
+  coord_flip() +
+  theme(legend.position = "none")
+
+results_occupation_clusters <- ggplot(results, aes(x=Occupation, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Occupation") +
+  theme(legend.position = "none")
+
+results_marital_clusters <- ggplot(results, aes(x=MaritalStatus, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Marital Status") +
+  theme(legend.position = "none")
+
+results_owner_clusters <- ggplot(results, aes(x=HomeOwnerFlag, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Home Owner Flag") +
+  theme(legend.position = "none")
+
+results_cars_clusters <- ggplot(results, aes(x=NumberCarsOwned, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Number Cars Owned") +
+  theme(legend.position = "none")
+
+results_childrenhome_clusters <- ggplot(results, aes(x=NumberChildrenAtHome, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Number Children At Home") +
+  theme(legend.position = "none")
+
+results_childrentotal_clusters <- ggplot(results, aes(x=TotalChildren, fill = clustering)) +
+  geom_bar() +
+  scale_fill_manual(values=c("#008080", "#003366", "#ff7f0e")) +
+  labs(y = "", x = "Total Children") +
+  theme(legend.position = "none")
+
+# Panel: Full customer groups analysis
+ggarrange(
+  results_age_clusters, results_country_clusters, results_education_clusters, 
+  results_occupation_clusters, results_marital_clusters, results_owner_clusters, 
+  results_cars_clusters, results_childrenhome_clusters, results_childrentotal_clusters,
+  labels = c(""),
+  ncol = 3, nrow = 3,
+  common.legend = TRUE, legend = "bottom"
+)
+
+# The conclusions for this analysis will be showed in the CONCLUSIONS.md
+
+####
+
