@@ -272,3 +272,59 @@ ggarrange(
 ####
 
 # The conclusions for this analysis will be showed in the CONCLUSIONS.md
+
+#### Assigning remaining customers ####
+
+library(proxy)
+library(jsonlite)
+
+# Extract the medoids (centers in PAM clusters)
+medoids <- df_clean[pam$medoids,]
+
+# Remaining customers to assign
+remaining_data <- df[5001:18361,]
+
+# Preparation of the data as before
+remaining_clean <- remaining_data %>%
+  select(CountryRegionName, Education, Occupation, Gender, MaritalStatus, 
+         HomeOwnerFlag, NumberCarsOwned, NumberChildrenAtHome, TotalChildren, 
+         YearlyIncome, Age)
+
+remaining_clean$CountryRegionName <- as.factor(remaining_clean$CountryRegionName)
+remaining_clean$Education <- as.factor(remaining_clean$Education)
+remaining_clean$Gender <- as.factor(remaining_clean$Gender)
+remaining_clean$Occupation <- as.factor(remaining_clean$Occupation)
+remaining_clean$MaritalStatus <- as.factor(remaining_clean$MaritalStatus)
+remaining_clean$HomeOwnerFlag <- as.factor(remaining_clean$HomeOwnerFlag)
+
+# Calculation of the distances from each remaining customer to each medoid
+# Proxy for efficient distance assignation
+gower_dist <- proxy::dist(remaining_clean, medoids, method = "gower")
+
+# Assignation
+remaining_clusters <- apply(as.matrix(gower_dist), 1, which.min)
+table(remaining_clusters)
+
+# In the remaining data, the most frequent cluster is number 2 too
+
+remaining_data$clustering <- as.factor(remaining_clusters)
+
+# Mergin the two final datasets
+results <- rbind(
+  select(df_final, names(df_final)), 
+  select(remaining_data, names(df_final))
+)
+
+table(results$clustering)
+
+# In the full dataset, the third clusters is the less frequent
+
+prop.table(table(results$clustering, results$BikeBuyer), 1)
+
+# The proportion of bike buyers remains similar
+
+# Saving the results as csv and json for the dashboard
+write.csv(results, "clustering_results.csv", row.names = FALSE)
+write_json(results, "../../public/clustering_results.json", pretty = TRUE)
+
+####
