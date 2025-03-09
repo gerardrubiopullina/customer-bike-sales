@@ -1,7 +1,8 @@
 'use client';
 
+import { useCustomers } from '@/context/CustomerContext';
 import { getClusterColorClass } from '@/functions/utils';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface Customer {
   CustomerID: number;
@@ -14,33 +15,28 @@ interface Customer {
   Gender: string;
 }
 
+const CUSTOMERS_PER_PAGE = 20
+
 export default function CustomersList() {
 
-  const [customers, setCustomers] = useState<Customer[]>([]);
+  const { customers } = useCustomers();
+
+  const [displayedCustomers, setDisplayedCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
+
   const tableRef = useRef<HTMLTableElement | null>(null);
 
   useEffect(() => {
-    const fetchCustomers = async () => {
+    if (customers.length > 0) {
       setLoading(true);
-      try {
-        const response = await fetch('/clustering_results.json');
-        const data: Customer[] = await response.json();
-        const customersPerPage = 20;
-        const newCustomers = data.slice((page - 1) * customersPerPage, page * customersPerPage);
-        setCustomers((prevCustomers) => [...prevCustomers, ...newCustomers]);
-      } catch (error) {
-        console.error("Error fetching customer data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const newCustomers = customers.slice(0, page * CUSTOMERS_PER_PAGE);
+      setDisplayedCustomers(newCustomers);
+      setLoading(false);
+    }
+  }, [customers, page]);
 
-    fetchCustomers();
-  }, [page]);
-
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     const table = tableRef.current;
     if (table) {
       const bottom = table.scrollHeight === table.scrollTop + table.clientHeight;
@@ -48,7 +44,7 @@ export default function CustomersList() {
         setPage((prevPage) => prevPage + 1);
       }
     }
-  };
+  }, [loading]);
 
   useEffect(() => {
     const table = tableRef.current;
@@ -58,8 +54,7 @@ export default function CustomersList() {
         if (table) table.removeEventListener('scroll', handleScroll);
       };
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading]);
+  }, [handleScroll, loading]);
 
   return (
     <div className="h-full card overflow-hidden flex flex-col">
@@ -78,7 +73,7 @@ export default function CustomersList() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {customers.map((customer) => (
+            {displayedCustomers.map((customer) => (
               <tr key={customer.CustomerID} className="hover:bg-slate-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="font-medium">{`${customer.FirstName} ${customer.LastName}`}</span>
