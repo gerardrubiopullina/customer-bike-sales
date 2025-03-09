@@ -1,19 +1,10 @@
 'use client';
 
+import { Customer } from '@/app/types';
 import { useCustomers } from '@/context/CustomerContext';
 import { getClusterColorClass } from '@/functions/utils';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-interface Customer {
-  CustomerID: number;
-  FirstName: string;
-  LastName: string;
-  CountryRegionName: string;
-  Age: number;
-  clustering: string;
-  BikeBuyer: boolean;
-  Gender: string;
-}
 
 const CUSTOMERS_PER_PAGE = 20
 

@@ -1,16 +1,16 @@
+'use client'
+
 import { Groups2, PedalBike, Troubleshoot } from "@mui/icons-material";
 import MetricCard from "./MetricCard";
+import { useCustomers } from "@/context/CustomerContext";
+import { calculateMetrics } from "@/functions/utils";
 
 
 export default function MetricsRow() {
 
-    const metrics = {
-        totalCustomers: 18355,
-        bikeBuyers: 10127,
-        conversionRate: 55.17,
-        topCluster: 3,
-        topClusterConversion: 82.4
-    };
+    const {customers} = useCustomers();
+
+    const metrics = calculateMetrics(customers);
 
     return(
         <div className="grid grid-cols-3 gap-4 mb-4">
@@ -29,7 +29,7 @@ export default function MetricsRow() {
             <MetricCard
                 title="Top Performing Cluster"
                 value={`Cluster ${metrics.topCluster}`}
-                description={`${metrics.topClusterConversion}% conversion rate`}
+                description={`${metrics.topClusterConversion.toFixed(2)}% conversion rate`}
                 icon={<Troubleshoot/>}
             />
         </div>
