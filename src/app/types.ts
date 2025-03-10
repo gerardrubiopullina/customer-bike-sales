@@ -8,6 +8,8 @@ export interface Customer {
     Age: number;
     clustering: string;
     BikeBuyer: number;
+    Education: string;
+    Occupation: string;
     Gender: string;
 }
 
