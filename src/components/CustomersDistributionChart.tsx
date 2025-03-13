@@ -15,22 +15,23 @@ interface DataCounts {
 }
 
 type GroupByKey = "Education" | "Occupation";
-const GROUP_BY_OPTIONS: GroupByKey[] = ["Education", "Occupation"];
+const GROUP_BY_OPTIONS: GroupByKey[] = ["Occupation", "Education"];
 
 const COLORS = ["#008080", "#003366", "#ff7f0e"];
 
 export default function CustomersDistributionChart() {
-  const { customers } = useCustomers();
-  const [groupBy, setGroupBy] = useState<GroupByKey>("Education");
 
-  const clusterIds = Array.from(new Set(customers.map((c) => c.clustering))).sort();
+  const { filteredCustomers } = useCustomers();
+  const [groupBy, setGroupBy] = useState<GroupByKey>("Occupation");
+
+  const clusterIds = Array.from(new Set(filteredCustomers.map((c) => c.clustering))).sort();
 
   const prepareChartData = (): ChartData[] => {
-    if (!customers || customers.length === 0) return [];
+    if (!filteredCustomers || filteredCustomers.length === 0) return [];
 
     const groupedData: Record<string, DataCounts> = {};
 
-    customers.forEach((customer) => {
+    filteredCustomers.forEach((customer) => {
       const category = (customer[groupBy] ?? "Unknown") as string;
       const cluster = customer.clustering;
       if (!groupedData[category]) {

@@ -8,9 +8,9 @@ import { calculateMetrics } from "@/functions/utils";
 
 export default function MetricsRow() {
 
-    const {customers} = useCustomers();
+    const {filteredCustomers} = useCustomers();
 
-    const metrics = calculateMetrics(customers);
+    const metrics = calculateMetrics(filteredCustomers);
 
     return(
         <div className="grid grid-cols-3 gap-4 mb-4">
