@@ -3,6 +3,7 @@
 import { Customer } from '@/app/types';
 import { useCustomers } from '@/context/CustomerContext';
 import { getClusterColorClass } from '@/functions/utils';
+import { PedalBike } from '@mui/icons-material';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 
@@ -68,6 +69,9 @@ export default function CustomersList() {
               <tr key={customer.CustomerID} className="hover:bg-slate-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="font-medium">{`${customer.FirstName} ${customer.LastName}`}</span>
+                  {customer.BikeBuyer 
+                    ? <span className='ml-2 text-slate-500'><PedalBike/></span>
+                    : null}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {customer.CountryRegionName}
