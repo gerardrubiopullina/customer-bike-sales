@@ -1,5 +1,6 @@
 import CustomersBarChart from "@/components/CustomersDistributionChart";
 import CustomersList from "@/components/CustomersList";
+import IncomeSpentCorrelationChart from "@/components/IncomeSpentCorrelationChart";
 import MetricsRow from "@/components/MetricsRow";
 
 
@@ -16,8 +17,8 @@ export default function Home() {
           <div>
             <CustomersBarChart/>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-4">
-            <h2 className="text-xl font-semibold mb-4"></h2>
+          <div>
+            <IncomeSpentCorrelationChart/>
           </div>
         </div>
       </div>

@@ -11,6 +11,8 @@ export interface Customer {
     Education: string;
     Occupation: string;
     Gender: string;
+    AvgMonthSpend: number;
+    YearlyIncome: number;
 }
 
 export interface MetricsData {

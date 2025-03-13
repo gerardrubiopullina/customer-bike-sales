@@ -1,9 +1,9 @@
 'use client'
 
-import { useCustomers } from "@/context/CustomerContext";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Text } from "recharts";
-import { Selector } from "./Selector";
 import { useState } from "react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
+import { useCustomers } from "@/context/CustomerContext";
+import { Selector } from "./Selector";
 
 interface ChartData {
   name: string;
