@@ -73,7 +73,7 @@ export default function CustomersDistributionChart() {
             data={data}
             layout="vertical"
             margin={{ right: 20 }}
-            barSize={30}
+            barSize={20}
           >
             <CartesianGrid strokeDasharray="3 3" horizontal={false} />
             <XAxis
@@ -92,12 +92,12 @@ export default function CustomersDistributionChart() {
               tickLine={false}
               width={90}
             />
-            {clusterIds.map((clusterId, index) => (
+            {clusterIds.map((clusterId) => (
               <Bar
                 key={clusterId}
                 dataKey={clusterId}
                 name={`Cluster ${clusterId}`}
-                fill={COLORS[index % COLORS.length]}
+                fill={COLORS[Number(clusterId) - 1]}
                 stackId="clusters"
               />
             ))}

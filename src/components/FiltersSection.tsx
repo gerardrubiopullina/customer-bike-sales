@@ -52,7 +52,7 @@ export default function FiltersSidebar() {
     };
 
     return (
-        <div>
+        <div className="z-50">
             <button
                 onClick={toggleSidebar}
                 className="fixed cursor-pointer bottom-6 right-6 bg-teal-600 text-white px-4 py-2 

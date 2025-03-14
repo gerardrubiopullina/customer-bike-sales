@@ -1,3 +1,4 @@
+import IncomePerAgeChart from "@/components/IncomePerAgeChart";
 import CustomersBarChart from "@/components/CustomersDistributionChart";
 import CustomersList from "@/components/CustomersList";
 // import IncomeSpentCorrelationChart from "@/components/IncomeSpentCorrelationChart";
@@ -19,6 +20,7 @@ export default function Home() {
           </div>
           <div>
             {/* <IncomeSpentCorrelationChart/> */}
+            <IncomePerAgeChart/>
           </div>
         </div>
       </div>
