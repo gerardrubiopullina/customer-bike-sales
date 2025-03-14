@@ -1,12 +1,21 @@
 'use client'
 
 import { useState } from "react";
-import { Close } from "@mui/icons-material";
-import { useFilters } from "@/context/FilterContext";
+import { Close, FilterList } from "@mui/icons-material";
+import { CLUSTERS, CLUSTERS_COLORS_CLASS, GENDERS, useFilters } from "@/context/FilterContext";
+import { useCustomers } from "@/context/CustomerContext";
+
 
 export default function FiltersSidebar() {
-    const { filters, setFilters } = useFilters();
+
+    const {customers} = useCustomers();
+    const {filters, setFilters} = useFilters();
+
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    const uniqueCountries = Array.from(
+        new Set(customers.map((c) => c.CountryRegionName))
+    ).sort();
 
     const handleClusterClick = (clusterId: string) => {
         setFilters({
@@ -46,14 +55,18 @@ export default function FiltersSidebar() {
         <div>
             <button
                 onClick={toggleSidebar}
-                className="fixed cursor-pointer top-16 right-4 bg-indigo-600 text-white px-4 py-2 rounded-lg 
-                    shadow-md hover:bg-indigo-700 focus:outline-none transition"
+                className="fixed cursor-pointer bottom-6 right-6 bg-teal-600 text-white px-4 py-2 
+                    rounded-full shadow-lg hover:bg-teal-700 focus:outline-none transition flex 
+                    items-center gap-2 z-10"
+                style={{ transform: 'translateY(-100%)' }}
             >
-                Apply Filters
+                <FilterList />
+                <span>Filters</span>
             </button>
 
             <div
-                className={`fixed top-0 right-0 w-80 h-full bg-white shadow-lg rounded-l-lg transform transition-transform ease-in-out duration-300 ${
+                className={`fixed top-0 right-0 w-80 h-full bg-white shadow-lg rounded-l-lg 
+                    transform transition-transform ease-in-out duration-300 ${
                     isSidebarOpen ? "translate-x-0" : "translate-x-full"
                 }`}
             >
@@ -77,17 +90,36 @@ export default function FiltersSidebar() {
                                 <button
                                     key={clusterId}
                                     onClick={() => handleClusterClick(clusterId)}
-                                    className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 focus:outline-none 
-                                    border-2 cursor-pointer ${
+                                    className={`px-4 py-2 flex items-center gap-2 text-sm font-medium rounded-md 
+                                        transition-all duration-200 focus:outline-none border-2 cursor-pointer ${
                                         filters.selectedClusters.includes(clusterId)
-                                        ? "bg-[#14b8a620] text-[#14b8a6] border-cyan-500"
-                                        : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50"
+                                            ? "bg-[#14b8a620] text-[#14b8a6] border-cyan-500"
+                                            : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50"
                                     }`}
                                 >
+                                    <div className={`w-3 h-3 rounded-full ${
+                                        CLUSTERS_COLORS_CLASS[Number(clusterId) - 1]
+                                    }`}></div>
                                     Cluster {clusterId}
                                 </button>
                             ))}
                         </div>
+                        {!CLUSTERS.every(id => filters.selectedClusters.includes(id)) &&
+                            <div className="mt-2">
+                                <button
+                                    onClick={() => {
+                                        setFilters({
+                                            ...filters,
+                                            selectedClusters: filters.selectedClusters = [...CLUSTERS]
+                                        });
+                                    }}
+                                    className="text-sm text-cyan-600 hover:text-cyan-700 hover:underline 
+                                        focus:outline-none cursor-pointer"
+                                >
+                                    Select all clusters
+                                </button>
+                            </div>
+                        }
                     </div>
 
                     <div className="flex flex-col space-y-1">
@@ -101,9 +133,11 @@ export default function FiltersSidebar() {
                             className="px-4 py-2 mt-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         >
                             <option value="all">All Countries</option>
-                            <option value="Australia">Australia</option>
-                            <option value="Spain">Spain</option>
-                            <option value="Germany">Germany</option>
+                            {uniqueCountries.map((country) => (
+                                <option key={country} value={country}>
+                                    {country}
+                                </option>
+                            ))}
                         </select>
                     </div>
 
@@ -112,7 +146,7 @@ export default function FiltersSidebar() {
                             Gender
                         </label>
                         <div className="flex flex-wrap gap-2 mt-4">
-                            {["All", "Male", "Female"].map((genderId) => (
+                            {GENDERS.map((genderId) => (
                                 <button
                                     key={genderId}
                                     onClick={() => handleGenderClick(genderId)}
@@ -123,7 +157,12 @@ export default function FiltersSidebar() {
                                         : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50"
                                     }`}
                                 >
-                                    {genderId}
+                                    {genderId == "M" 
+                                        ? "Male"
+                                        : genderId == "F"
+                                            ? "Female"
+                                            : genderId
+                                    }
                                 </button>
                             ))}
                         </div>
