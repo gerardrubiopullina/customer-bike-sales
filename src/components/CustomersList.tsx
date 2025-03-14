@@ -1,25 +1,18 @@
 'use client';
 
-import { useCustomers } from '@/context/CustomerContext';
-import { getClusterColorClass } from '@/functions/utils';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-interface Customer {
-  CustomerID: number;
-  FirstName: string;
-  LastName: string;
-  CountryRegionName: string;
-  Age: number;
-  clustering: string;
-  BikeBuyer: boolean;
-  Gender: string;
-}
+import { Customer } from '@/app/types';
+import { useCustomers } from '@/context/CustomerContext';
+import { getClusterColorClass } from '@/functions/utils';
+import { PedalBike } from '@mui/icons-material';
+
 
 const CUSTOMERS_PER_PAGE = 20
 
 export default function CustomersList() {
 
-  const { customers } = useCustomers();
+  const { filteredCustomers } = useCustomers();
 
   const [displayedCustomers, setDisplayedCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(false);
@@ -28,13 +21,13 @@ export default function CustomersList() {
   const tableRef = useRef<HTMLTableElement | null>(null);
 
   useEffect(() => {
-    if (customers.length > 0) {
+    if (filteredCustomers.length > 0) {
       setLoading(true);
-      const newCustomers = customers.slice(0, page * CUSTOMERS_PER_PAGE);
+      const newCustomers = filteredCustomers.slice(0, page * CUSTOMERS_PER_PAGE);
       setDisplayedCustomers(newCustomers);
       setLoading(false);
     }
-  }, [customers, page]);
+  }, [filteredCustomers, page]);
 
   const handleScroll = useCallback(() => {
     const table = tableRef.current;
@@ -77,6 +70,9 @@ export default function CustomersList() {
               <tr key={customer.CustomerID} className="hover:bg-slate-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="font-medium">{`${customer.FirstName} ${customer.LastName}`}</span>
+                  {customer.BikeBuyer 
+                    ? <span className='ml-2 text-slate-500'><PedalBike/></span>
+                    : null}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {customer.CountryRegionName}
