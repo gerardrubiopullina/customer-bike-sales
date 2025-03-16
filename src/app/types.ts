@@ -13,6 +13,9 @@ export interface Customer {
     Gender: string;
     AvgMonthSpend: number;
     YearlyIncome: number;
+    HomeOwnerFlag: number;
+    NumberChildrenAtHome: number;
+    MaritalStatus: string;
 }
 
 export interface MetricsData {
@@ -21,4 +24,20 @@ export interface MetricsData {
     conversionRate: string;
     topCluster: string;
     topClusterConversion: number;
+}
+
+export interface HeatmapCell {
+  homeOwnerFlag?: number;
+  maritalStatus?: string;
+  numChildren: number;
+  buyerRate: number;
+  total: number;
+  buyers: number;
+  id: string;
+  clusterDistribution?: {
+    [key: string]: {
+      count: number;
+      percentage: number;
+    }
+  };
 }

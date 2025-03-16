@@ -17,6 +17,7 @@ interface FilterContextType {
 export const CLUSTERS = ["1", "2", "3"];
 export const CLUSTERS_COLORS_CLASS = ["cluster-1-bg", "cluster-2-bg", "cluster-3-bg"];
 export const GENDERS = ["All", "M", "F"];
+export const MARITAL_STATUS = ["S", "M"];
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
 
