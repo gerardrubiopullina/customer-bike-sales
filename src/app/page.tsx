@@ -3,35 +3,29 @@ import CustomersBarChart from "@/components/CustomersDistributionChart";
 import CustomersList from "@/components/CustomersList";
 import MetricsRow from "@/components/MetricsRow";
 import BikeBuyerHeatmap from "@/components/BikeBuyerHeatmap";
+import ClusterRadarChart from "@/components/ClusterRadarChart";
 
 
 export default function Home() {
   return (
-    <div className="h-full grid grid-cols-12 gap-4 p-4">
-      <div className="col-span-4 overflow-y-auto">
+    <div className="h-full grid grid-cols-12 grid-rows-5 gap-4 p-4">
+      <div className="col-start-1 col-end-5 row-start-1 row-end-6">
         <CustomersList />
       </div>
-      <div className="col-span-8">
+      <div className="col-start-5 col-end-13 row-start-1 row-end-2">
         <MetricsRow/>
-        <div className="mt-2 grid grid-cols-2 gap-4">
-          <div>
-            <CustomersBarChart />
-          </div>
-          <div>
-            <IncomePerAgeChart />
-          </div>
-        </div>
-        <div className="mt-4 grid grid-cols-5 gap-4">
-          <div className="col-span-2">
-            <BikeBuyerHeatmap />
-          </div>
-          <div className="bg-white col-span-3 rounded-lg shadow-md p-4 h-full">
-            Analisis de los clusters.
-            porcentaje de bike buyers en cada cluster y clientes totales. Explicacion y generales
-            Explicar para filtrar por solo un cluster para ver mas en detalle y mostrar el radar de las distintas propeidades e info mas relevante?
-            Ultim chat x ideas
-          </div>
-        </div>
+      </div>
+      <div className="col-start-5 col-end-9 row-start-2 row-end-4">
+        <CustomersBarChart />
+      </div>
+      <div className="col-start-9 col-end-13 row-start-2 row-end-4">
+        <IncomePerAgeChart />
+      </div>
+      <div className="col-start-5 col-end-8 row-start-4 row-end-6">
+        <BikeBuyerHeatmap />
+      </div>
+      <div className="col-start-8 col-end-13 row-start-4 row-end-6">
+        <ClusterRadarChart />
       </div>
     </div>
   );

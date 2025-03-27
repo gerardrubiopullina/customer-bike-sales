@@ -18,7 +18,7 @@ export default function CustomersList() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
 
-  const tableRef = useRef<HTMLTableElement | null>(null);
+  const tableRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (filteredCustomers.length > 0) {
@@ -32,7 +32,7 @@ export default function CustomersList() {
   const handleScroll = useCallback(() => {
     const table = tableRef.current;
     if (table) {
-      const bottom = table.scrollHeight === table.scrollTop + table.clientHeight;
+      const bottom = table.scrollHeight - table.scrollTop - table.clientHeight < 1;
       if (bottom && !loading) {
         setPage((prevPage) => prevPage + 1);
       }
@@ -50,19 +50,23 @@ export default function CustomersList() {
   }, [handleScroll, loading]);
 
   return (
-    <div className="h-full card overflow-hidden flex flex-col">
-      <div className="p-4 bg-slate-50 border-b">
-        <h2 className="text-base font-semibold text-slate-700">Customers List</h2>
-      </div>
-
-      <div className="overflow-auto flex-1" ref={tableRef}>
+    <div className="h-full card bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+      <div className="overflow-auto flex-1" onScroll={handleScroll} ref={tableRef}>
         <table className="min-w-full divide-y divide-gray-200 text-sm">
-          <thead className="bg-slate-50">
+          <thead className="bg-slate-50 sticky top-0 z-10">
             <tr>
-              <th className="px-6 py-3 text-left font-medium text-slate-500 uppercase tracking-wider">Customer</th>
-              <th className="px-6 py-3 text-left font-medium text-slate-500 uppercase tracking-wider">Location</th>
-              <th className="px-6 py-3 text-left font-medium text-slate-500 uppercase tracking-wider">Age</th>
-              <th className="px-6 py-3 text-left font-medium text-slate-500 uppercase tracking-wider">Group</th>
+              <th className="px-6 py-3 text-left font-medium text-slate-500 uppercase tracking-wider bg-slate-50">
+                Customer
+              </th>
+              <th className="px-6 py-3 text-left font-medium text-slate-500 uppercase tracking-wider bg-slate-50">
+                Location
+              </th>
+              <th className="px-6 py-3 text-left font-medium text-slate-500 uppercase tracking-wider bg-slate-50">
+                Age
+              </th>
+              <th className="px-6 py-3 text-left font-medium text-slate-500 uppercase tracking-wider bg-slate-50">
+                Group
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -70,16 +74,12 @@ export default function CustomersList() {
               <tr key={customer.CustomerID} className="hover:bg-slate-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="font-medium">{`${customer.FirstName} ${customer.LastName}`}</span>
-                  {customer.BikeBuyer 
-                    ? <span className='ml-2 text-slate-500'><PedalBike/></span>
-                    : null}
+                  {customer.BikeBuyer == 1 && (
+                    <span className="ml-2 text-slate-500"><PedalBike /></span>
+                  )}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {customer.CountryRegionName}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {customer.Age}
-                </td>
+                <td className="px-6 py-4 whitespace-nowrap">{customer.CountryRegionName}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{customer.Age}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className={`w-3 h-3 rounded-full mr-2 ${getClusterColorClass(customer.clustering)}`}></div>
@@ -93,8 +93,8 @@ export default function CustomersList() {
       </div>
 
       {loading && (
-        <div className="text-center py-4">
-          <span>Loading more customers...</span>
+        <div className="text-center py-2 bg-slate-50 border-t">
+          <span className="text-sm text-slate-500">Loading more customers...</span>
         </div>
       )}
     </div>

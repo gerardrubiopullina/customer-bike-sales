@@ -7,7 +7,7 @@ import { MARITAL_STATUS } from "@/context/FilterContext";
 import { HeatmapCell } from "@/app/types";
 import { getTextColor } from "@/functions/utils";
 
-import { InfoTooltip } from "@/components/InfoTooltip";
+import { HeatmapTooltip } from "@/components/HeatmapTooltip";
 
 
 const COLOR_SCALE = (rate: number) => {
@@ -149,7 +149,7 @@ export default function BikeBuyerHeatmap() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6 h-70 flex flex-col relative heatmap-container">
+    <div className="bg-white rounded-lg shadow-md p-6 h-full flex flex-col relative heatmap-container">
       <div className="flex justify-between items-center mb-4">
         <h2 className="uppercase tracking-wide font-semibold text-slate-700 text-base">
           Bike Buyers by Household Characteristics
@@ -230,7 +230,7 @@ export default function BikeBuyerHeatmap() {
       </div>
 
       {hoveredCell && (
-        <InfoTooltip
+        <HeatmapTooltip
           cell={hoveredCell.cell}
           position={hoveredCell.position}
         />

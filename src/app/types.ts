@@ -1,5 +1,3 @@
-
-
 export interface Customer {
     CustomerID: number;
     FirstName: string;
@@ -16,6 +14,8 @@ export interface Customer {
     HomeOwnerFlag: number;
     NumberChildrenAtHome: number;
     MaritalStatus: string;
+    NumberCarsOwned: number;
+    TotalChildren: number;
 }
 
 export interface MetricsData {

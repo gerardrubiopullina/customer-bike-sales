@@ -10,7 +10,7 @@ interface InfoTooltipProps {
     };
 }
 
-export function InfoTooltip({ cell, position }: InfoTooltipProps) {
+export function HeatmapTooltip({ cell, position }: InfoTooltipProps) {
 
     const getCellDescription = (cell: HeatmapCell) => {
         if (cell.homeOwnerFlag !== undefined) {
