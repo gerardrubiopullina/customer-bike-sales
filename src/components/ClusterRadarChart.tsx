@@ -2,10 +2,17 @@
 
 import { useCustomers } from "@/context/CustomerContext";
 import { useFilters } from "@/context/FilterContext";
-import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, Radar, Tooltip, Legend } from 'recharts';
+import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, Radar, Tooltip} from 'recharts';
 
 // Colores consistentes con los demás componentes
 const COLORS = ["#008080", "#003366", "#ff7f0e"];
+
+// Función para acortar nombres largos
+const shortenMetricName = (name: string): string => {
+  const words = name.split(' ');
+  if (words.length === 1) return name.slice(0, 6) + '.';
+  return words.map(word => word[0] + '.').join(' ');
+};
 
 // Función para normalizar valores entre 0 y 1
 const normalizeValue = (value: number, min: number, max: number) => {
@@ -48,6 +55,7 @@ interface TooltipProps {
 interface MetricDefinition {
   id: keyof ClusterMetrics;
   name: string;
+  radarName: string;
 }
 
 export default function ClusterRadarChart() {
@@ -105,12 +113,12 @@ export default function ClusterRadarChart() {
 
   // Preparar datos normalizados para el radar chart
   const metrics: MetricDefinition[] = [
-    { id: "NumberCarsOwned", name: "Cars Owned" },
-    { id: "NumberChildrenAtHome", name: "Children at Home" },
-    { id: "TotalChildren", name: "Total Children" },
-    { id: "YearlyIncome", name: "Yearly Income" },
-    { id: "AvgMonthSpend", name: "Monthly Spend" },
-    { id: "Age", name: "Age" }
+    { id: "NumberCarsOwned", name: "Cars Owned", radarName: "Cars" },
+    { id: "NumberChildrenAtHome", name: "Children at Home", radarName: "H. Kids" },
+    { id: "TotalChildren", name: "Total Children", radarName: "T. Kids" },
+    { id: "YearlyIncome", name: "Yearly Income", radarName: "Income" },
+    { id: "AvgMonthSpend", name: "Monthly Spend", radarName: "Spend" },
+    { id: "Age", name: "Age", radarName: "Age" }
   ];
 
   interface DataPoint {
@@ -158,7 +166,7 @@ export default function ClusterRadarChart() {
                   Cluster {clusterId}: {rawValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}
                 </p>
                 <p className="text-xs text-slate-500">
-                  Rango: {metrics.min.toLocaleString()} - {metrics.max.toLocaleString()}
+                  Range: {metrics.min.toLocaleString()} - {metrics.max.toLocaleString()}
                 </p>
               </div>
             );
@@ -170,38 +178,39 @@ export default function ClusterRadarChart() {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 h-full">
-      <h2 className="uppercase tracking-wider font-semibold mb-4 text-slate-600 text-sm">
-        Perfil de Clientes por Cluster
-      </h2>
-      
-      <div className="flex gap-6 h-70">
-        <div className="w-1/2 flex items-center justify-center">
-          <div className="w-full aspect-square">
-            <ResponsiveContainer width="100%" height="100%">
-              <RadarChart cx="50%" cy="40%" outerRadius="50%" data={data} >
-                <PolarGrid stroke="#e2e8f0" />
-                <PolarAngleAxis
-                  dataKey="metric"
-                  tick={{ fill: '#475569', fontSize: 12 }}
-                  tickLine={false}
-                />
-                {filters.selectedClusters.map((clusterId) => (
-                  <Radar
-                    key={clusterId}
-                    name={`Cluster ${clusterId}`}
-                    dataKey={`cluster${clusterId}`}
-                    stroke={COLORS[Number(clusterId) - 1]}
-                    fill={COLORS[Number(clusterId) - 1]}
-                    fillOpacity={0.3}
-                  />
-                ))}
-                <Tooltip content={<CustomTooltip />} />
-              </RadarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
+    <div className="h-full w-full flex items-center justify-center relative">
+      <ResponsiveContainer width="100%" height="100%">
+        <RadarChart cx="50%" cy="40%" outerRadius="80%" data={data}>
+          <PolarGrid stroke="#e2e8f0" />
+          <PolarAngleAxis
+            dataKey="metric"
+            tickFormatter={(value) => {
+              const metric = metrics.find(m => m.name === value);
+              return metric ? metric.radarName : value;
+            }}
+            className="uppercase tracking-wider font-semibold mb-4 text-slate-600 text-xs"
+            tick={{
+              fill: '#475569',
+              fontSize: 14,
+              dy: 20,
+              dx: 0,
+            }}
+            tickLine={false}
+            axisLine={false}
+          />
+          {filters.selectedClusters.map((clusterId) => (
+            <Radar
+              key={clusterId}
+              name={`Cluster ${clusterId}`}
+              dataKey={`cluster${clusterId}`}
+              stroke={COLORS[Number(clusterId) - 1]}
+              fill={COLORS[Number(clusterId) - 1]}
+              fillOpacity={0.3}
+            />
+          ))}
+          <Tooltip content={<CustomTooltip />} />
+        </RadarChart>
+      </ResponsiveContainer>
     </div>
   );
 } 

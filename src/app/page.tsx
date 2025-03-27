@@ -3,7 +3,7 @@ import CustomersBarChart from "@/components/CustomersDistributionChart";
 import CustomersList from "@/components/CustomersList";
 import MetricsRow from "@/components/MetricsRow";
 import BikeBuyerHeatmap from "@/components/BikeBuyerHeatmap";
-import ClusterRadarChart from "@/components/ClusterRadarChart";
+import ClusterAnalysis from "@/components/ClusterAnalysis";
 
 
 export default function Home() {
@@ -25,7 +25,7 @@ export default function Home() {
         <BikeBuyerHeatmap />
       </div>
       <div className="col-start-8 col-end-13 row-start-4 row-end-6">
-        <ClusterRadarChart />
+        <ClusterAnalysis/>
       </div>
     </div>
   );
