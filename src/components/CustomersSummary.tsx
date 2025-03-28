@@ -1,7 +1,7 @@
 'use client'
 
 import { useCustomers } from "@/context/CustomerContext";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 // Colores consistentes con los demás componentes
 const COLORS = ["#008080", "#003366", "#ff7f0e"];
@@ -48,7 +48,7 @@ export default function CustomersSummary() {
   const totalCustomers = clusters.reduce((acc, cluster) => acc + cluster.totalCustomers, 0);
 
   return (
-    <div className="h-full flex">
+    <div className="h-full flex pr-6">
       <div className="flex-1 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -56,7 +56,7 @@ export default function CustomersSummary() {
               data={pieData}
               cx="50%"
               cy="50%"
-              outerRadius="95%"
+              outerRadius="90%"
               innerRadius="55%"
               paddingAngle={3}
               dataKey="value"
@@ -78,30 +78,35 @@ export default function CustomersSummary() {
         </ResponsiveContainer>
       </div>
 
-      <div className="w-32 ml-4 flex flex-col">
-        <h3 className="text-sm font-semibold text-slate-600 mb-2">Bike Buyers</h3>
-        <div className="space-y-2">
+      <div className="w-50 ml-2 flex flex-col min-h-0">
+        <div className="space-y-2 flex-1 overflow-auto">
           {clusters.map(cluster => (
             <div 
               key={cluster.id} 
-              className="bg-slate-50 rounded-lg p-2 transition-all duration-200 hover:shadow-sm cursor-pointer"
+              className="bg-slate-50 rounded-lg p-2.5 transition-all duration-200 hover:shadow-sm cursor-pointer w-auto"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center">
                   <div 
-                    className="w-1.5 h-1.5 rounded-full mr-1.5" 
+                    className="w-2 h-2 rounded-full mr-2" 
                     style={{ backgroundColor: cluster.color }}
                   ></div>
-                  <h3 className="font-medium text-slate-700 text-xs">
+                  <h3 className="font-medium text-slate-700 text-sm">
                     Cluster {cluster.id}
                   </h3>
                 </div>
-                <span className="text-xs font-medium text-slate-500">
-                  {cluster.buyerPercentage}%
+                <span className="text-sm font-medium text-slate-700">
+                  {cluster.totalCustomers.toLocaleString()} users
                 </span>
               </div>
-              <div className="mt-1">
-                <div className="overflow-hidden h-1 text-xs flex rounded-full bg-slate-200">
+              
+              <div className="flex items-center justify-between text-xs text-slate-600 mb-1.5">
+                <span>{cluster.bikeBuyers.toLocaleString()} buyers</span>
+                <span className="font-medium">{cluster.buyerPercentage}%</span>
+              </div>
+
+              <div>
+                <div className="overflow-hidden h-1.5 text-xs flex rounded-full bg-slate-200">
                   <div
                     style={{
                       width: `${cluster.buyerPercentage}%`,

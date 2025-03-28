@@ -16,6 +16,7 @@ export interface Customer {
     MaritalStatus: string;
     NumberCarsOwned: number;
     TotalChildren: number;
+    PhoneNumber: string;
 }
 
 export interface MetricsData {
