@@ -4,22 +4,13 @@ import { useCustomers } from "@/context/CustomerContext";
 import { useFilters } from "@/context/FilterContext";
 import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, Radar, Tooltip} from 'recharts';
 
-// Colores consistentes con los demás componentes
+
 const COLORS = ["#008080", "#003366", "#ff7f0e"];
 
-// Función para acortar nombres largos
-const shortenMetricName = (name: string): string => {
-  const words = name.split(' ');
-  if (words.length === 1) return name.slice(0, 6) + '.';
-  return words.map(word => word[0] + '.').join(' ');
-};
-
-// Función para normalizar valores entre 0 y 1
 const normalizeValue = (value: number, min: number, max: number) => {
   return (value - min) / (max - min);
 };
 
-// Función para calcular el promedio
 const calculateAverage = (values: number[]) => {
   return values.reduce((acc, val) => acc + val, 0) / values.length;
 };
@@ -58,11 +49,16 @@ interface MetricDefinition {
   radarName: string;
 }
 
+interface DataPoint {
+  metric: string;
+  metricKey: keyof ClusterMetrics;
+  [key: string]: string | number;
+}
+
 export default function ClusterRadarChart() {
   const { filteredCustomers } = useCustomers();
   const { filters } = useFilters();
 
-  // Preparar datos por cluster
   const clusterData = filters.selectedClusters.reduce<Record<string, ClusterMetrics>>((acc, clusterId) => {
     const clusterCustomers = filteredCustomers.filter(customer => customer.clustering === clusterId);
     
@@ -101,7 +97,7 @@ export default function ClusterRadarChart() {
     return acc;
   }, {});
 
-  // Encontrar valores mínimos y máximos globales para normalización
+  // Find global min and max values for normalization
   const globalMetrics = Object.keys(clusterData[filters.selectedClusters[0]]).reduce<Record<keyof ClusterMetrics, { min: number; max: number }>>((acc, key) => {
     const metricKey = key as keyof ClusterMetrics;
     acc[metricKey] = {
@@ -111,7 +107,6 @@ export default function ClusterRadarChart() {
     return acc;
   }, {} as Record<keyof ClusterMetrics, { min: number; max: number }>);
 
-  // Preparar datos normalizados para el radar chart
   const metrics: MetricDefinition[] = [
     { id: "NumberCarsOwned", name: "Cars Owned", radarName: "Cars" },
     { id: "NumberChildrenAtHome", name: "Children at Home", radarName: "H. Kids" },
@@ -120,12 +115,6 @@ export default function ClusterRadarChart() {
     { id: "AvgMonthSpend", name: "Monthly Spend", radarName: "Spend" },
     { id: "Age", name: "Age", radarName: "Age" }
   ];
-
-  interface DataPoint {
-    metric: string;
-    metricKey: keyof ClusterMetrics;
-    [key: string]: string | number;
-  }
 
   const data = metrics.map(metric => {
     const dataPoint: DataPoint = {
@@ -147,7 +136,6 @@ export default function ClusterRadarChart() {
     return dataPoint;
   });
 
-  // Tooltip personalizado para mostrar valores reales
   const CustomTooltip = ({ active, payload }: TooltipProps) => {
     if (active && payload && payload.length) {
       const metricKey = payload[0].payload.metricKey as keyof ClusterMetrics;
