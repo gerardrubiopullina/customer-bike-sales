@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 import { useCustomers } from "@/context/CustomerContext";
-import { Selector } from "./Selector";
+import { Selector } from "@/components/Selector";
 
 interface ChartData {
   name: string;

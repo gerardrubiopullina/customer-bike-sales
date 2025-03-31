@@ -17,6 +17,13 @@ export const getClusterColorClass = (cluster: string) => {
   }
 };
 
+export const getTextColor = (backgroundColor: string) => {
+  const rgb = backgroundColor.match(/\d+/g);
+  if (!rgb) return 'text-slate-800';
+  const brightness = (+rgb[0] * 299 + +rgb[1] * 587 + +rgb[2] * 114) / 1000;
+  return brightness < 130 ? 'text-white' : 'text-slate-800';
+};
+
 export function calculateMetrics(customers: Customer[]): MetricsData {
 
   if (!customers || customers.length === 0) {

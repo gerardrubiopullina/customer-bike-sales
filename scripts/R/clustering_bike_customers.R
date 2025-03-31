@@ -401,5 +401,8 @@ ggarrange(
 
 # The conclusions for this analysis will be showed in the CONCLUSIONS.md
 
+# Save medoids for the pam api
+saveRDS(pam, "pam_model.rds")
+
 ####
 
