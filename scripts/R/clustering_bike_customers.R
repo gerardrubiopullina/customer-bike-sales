@@ -326,6 +326,7 @@ prop.table(table(results$clustering, results$BikeBuyer), 1)
 # Saving the results as csv and json for the dashboard
 write.csv(results, "clustering_results.csv", row.names = FALSE)
 write_json(results, "../../public/clustering_results.json", pretty = TRUE)
+write.csv(df_clean, "df_clean.csv", row.names = FALSE)
 
 ####
 #### View full clusters distribution ####
