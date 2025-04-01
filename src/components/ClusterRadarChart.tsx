@@ -38,7 +38,7 @@ interface TooltipProps {
     payload: {
       metric: string;
       metricKey: string;
-      [key: string]: any;
+      [key: string]: number | string;
     };
   }>;
 }
@@ -138,24 +138,22 @@ export default function ClusterRadarChart() {
 
   const CustomTooltip = ({ active, payload }: TooltipProps) => {
     if (active && payload && payload.length) {
-      const metricKey = payload[0].payload.metricKey as keyof ClusterMetrics;
-      
       return (
-        <div className="bg-white p-2 shadow-lg rounded-lg border border-slate-200">
-          <p className="font-medium text-slate-700">{payload[0].payload.metric}</p>
+        <div className="bg-white p-4 shadow-lg rounded-lg border border-slate-200">
+          <div className="text-sm font-semibold text-slate-800 border-b pb-2">
+            {payload[0].payload.metric}
+          </div>
           {payload.map((entry) => {
             const clusterId = entry.dataKey.replace('cluster', '');
             const rawValue = entry.payload[`${entry.dataKey}Raw`] as number;
-            const metrics = clusterData[clusterId][metricKey];
             
             return (
-              <div key={entry.dataKey} className="text-sm">
-                <p className="text-slate-600" style={{ color: entry.color }}>
-                  Cluster {clusterId}: {rawValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                </p>
-                <p className="text-xs text-slate-500">
-                  Range: {metrics.min.toLocaleString()} - {metrics.max.toLocaleString()}
-                </p>
+              <div key={entry.dataKey} className="mt-2">
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full`} style={{ backgroundColor: entry.color }}></div>
+                  <span className="text-sm text-slate-600">Cluster {clusterId}:</span>
+                  <span className="text-sm font-semibold">{rawValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
+                </div>
               </div>
             );
           })}

@@ -10,7 +10,7 @@ import {
     Tooltip,
 } from 'recharts';
 import { useCustomers } from '@/context/CustomerContext';
-import { useFilters } from '@/context/FilterContext';
+
 
 const COLORS = ['#008080', '#003366', '#ff7f0e'];
 
@@ -38,6 +38,16 @@ interface ScatterShapeProps {
     payload?: AgeGroupData;
 }
 
+interface CustomTooltipProps {
+    active?: boolean;
+    payload?: Array<{
+        payload: AgeGroupData;
+        color: string;
+    }>;
+    clusterDataMap: Record<string, AgeGroupData[]>;
+    clusterColorMap: Record<string, string>;
+}
+
 const AGE_INTERVALS = [
     { min: 0, max: 25, label: '<25' },
     { min: 26, max: 30, label: '26-30' },
@@ -56,11 +66,12 @@ const AGE_INTERVALS = [
 export default function IncomePerAgeChart() {
 
     const { filteredCustomers } = useCustomers();
-    const { filters } = useFilters();
 
     const clusterDataMap: Record<string, AgeGroupData[]> = {};
     const clusterColorMap: Record<string, string> = {};
-    filters.selectedClusters.forEach((clusterId) => {
+    
+    const allClusters = Array.from(new Set(filteredCustomers.map((c) => c.clustering)));
+    allClusters.forEach((clusterId) => {
         clusterColorMap[clusterId] = COLORS[Number(clusterId) - 1];
     });
 
@@ -73,8 +84,6 @@ export default function IncomePerAgeChart() {
         const clusters = Array.from(new Set(customersInInterval.map((c) => c.clustering)));
 
         clusters.forEach((clusterId) => {
-            if (!filters.selectedClusters.includes(clusterId)) return;
-
             const clusterCustomers = customersInInterval.filter((c) => c.clustering === clusterId);
             const avgIncome =
                 clusterCustomers.reduce((sum, c) => sum + Number(c.YearlyIncome || 0), 0) /
@@ -94,6 +103,42 @@ export default function IncomePerAgeChart() {
             });
         });
     });
+
+    const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
+        if (active && payload && payload.length) {
+            const currentAgeRange = payload[0].payload.ageRange;
+            const allClusterData = Object.entries(clusterDataMap).reduce((acc, [clusterId, data]) => {
+                const ageData = data.find(d => d.ageRange === currentAgeRange);
+                if (ageData) {
+                    acc[clusterId] = {
+                        ...ageData,
+                        color: clusterColorMap[clusterId]
+                    };
+                }
+                return acc;
+            }, {} as Record<string, { avgIncome: number; color: string }>);
+
+            return (
+                <div className="bg-white p-4 shadow-lg rounded-lg border border-slate-200">
+                    <div className="text-sm font-semibold text-slate-800 border-b pb-2">
+                        Age: {currentAgeRange}
+                    </div>
+                    {Object.entries(allClusterData).map(([clusterId, data]) => (
+                        <div key={`${clusterId}-${currentAgeRange}`} className="mt-2">
+                            <div className="flex items-center gap-2">
+                                <div className={`w-2 h-2 rounded-full`} style={{ backgroundColor: data.color }}></div>
+                                <span className="text-sm text-slate-600">Cluster {clusterId}</span>
+                            </div>
+                            <div className="text-sm text-slate-600 ml-5">
+                                Avg Income: <span className="font-semibold text-sm">€{data.avgIncome.toLocaleString()}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+        return null;
+    };
 
     const CustomDot = (props: CustomDotProps) => {
         const { cx, cy, payload } = props;
@@ -149,7 +194,7 @@ export default function IncomePerAgeChart() {
                             tickLine={false}
                             axisLine={false}
                         />
-                        <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                        <Tooltip content={<CustomTooltip clusterDataMap={clusterDataMap} clusterColorMap={clusterColorMap} />} />
                         {Object.entries(clusterDataMap).map(([clusterId, clusterData]) => (
                             <Scatter
                                 key={clusterId}
