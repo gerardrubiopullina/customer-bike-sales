@@ -3,7 +3,7 @@ library(proxy)
 library(cluster)
 
 # Load the PAM model
-pam_model <- readRDS("scripts/R/pam_model.rds")
+pam_model <- readRDS("pam_model.rds")
 
 #* @apiTitle Customer Classification API
 
