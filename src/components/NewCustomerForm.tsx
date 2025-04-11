@@ -1,7 +1,66 @@
 import { Close } from "@mui/icons-material";
 import { GENDERS, MARITAL_STATUS } from "@/context/FilterContext";
+import { useState } from "react";
 
 export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        address: '',
+        gender: GENDERS[1],
+        maritalStatus: MARITAL_STATUS[0],
+        age: '',
+        yearlyIncome: '',
+        avgMonthSpend: '',
+        numberCarsOwned: '',
+        numberChildrenAtHome: ''
+    });
+    
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { id, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [id]: value
+        }));
+    };
+    
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        
+        try {
+            const response = await fetch('/api/classify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+                throw new Error('Error en la llamada a la API');
+            }
+            
+            const result = await response.json();
+            console.log('Resultado de la API:', result);
+            
+            if (result.error) {
+                alert(result.error);
+            } else {
+                alert(result.message);
+                onClose();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al procesar la solicitud');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
     
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm">
@@ -16,15 +75,18 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
                     </button>
                 </div>
 
-                <form className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label htmlFor="firstName" className="block text-sm font-medium text-[#003366] mb-1">
-                                First Name
+                                First Name *
                             </label>
                             <input
                                 type="text"
                                 id="firstName"
+                                value={formData.firstName}
+                                onChange={handleChange}
+                                required
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                                 placeholder="Enter first name"
                             />
@@ -32,11 +94,14 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
 
                         <div>
                             <label htmlFor="lastName" className="block text-sm font-medium text-[#003366] mb-1">
-                                Last Name
+                                Last Name *
                             </label>
                             <input
                                 type="text"
                                 id="lastName"
+                                value={formData.lastName}
+                                onChange={handleChange}
+                                required
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                                 placeholder="Enter last name"
                             />
@@ -51,6 +116,8 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
                             <input
                                 type="email"
                                 id="email"
+                                value={formData.email}
+                                onChange={handleChange}
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                                 placeholder="example@email.com"
                             />
@@ -63,6 +130,8 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
                             <input
                                 type="tel"
                                 id="phone"
+                                value={formData.phone}
+                                onChange={handleChange}
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                                 placeholder="(123) 456-7890"
                             />
@@ -75,6 +144,8 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
                         </label>
                         <textarea
                             id="address"
+                            value={formData.address}
+                            onChange={handleChange}
                             rows={1}
                             className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                             placeholder="Enter complete address"
@@ -84,10 +155,13 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
                     <div className="grid grid-cols-3 gap-4">
                         <div>
                             <label htmlFor="gender" className="block text-sm font-medium text-[#003366] mb-1">
-                                Gender
+                                Gender *
                             </label>
                             <select
                                 id="gender"
+                                value={formData.gender}
+                                onChange={handleChange}
+                                required
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                             >
                                 {GENDERS.filter(gender => gender !== "All").map((gender) => (
@@ -104,6 +178,8 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
                             </label>
                             <select
                                 id="maritalStatus"
+                                value={formData.maritalStatus}
+                                onChange={handleChange}
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                             >
                                 {MARITAL_STATUS.map((status) => (
@@ -121,6 +197,8 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
                             <input
                                 type="number"
                                 id="age"
+                                value={formData.age}
+                                onChange={handleChange}
                                 min="0"
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                                 placeholder="Enter age"
@@ -136,6 +214,8 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
                             <input
                                 type="number"
                                 id="yearlyIncome"
+                                value={formData.yearlyIncome}
+                                onChange={handleChange}
                                 min="0"
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                                 placeholder="Enter yearly income"
@@ -149,6 +229,8 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
                             <input
                                 type="number"
                                 id="avgMonthSpend"
+                                value={formData.avgMonthSpend}
+                                onChange={handleChange}
                                 min="0"
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                                 placeholder="Enter average monthly spend"
@@ -164,6 +246,8 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
                             <input
                                 type="number"
                                 id="numberCarsOwned"
+                                value={formData.numberCarsOwned}
+                                onChange={handleChange}
                                 min="0"
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                                 placeholder="Enter number of cars"
@@ -177,6 +261,8 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
                             <input
                                 type="number"
                                 id="numberChildrenAtHome"
+                                value={formData.numberChildrenAtHome}
+                                onChange={handleChange}
                                 min="0"
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                                 placeholder="Enter number of children at home"
@@ -196,11 +282,13 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
                         </button>
                         <button
                             type="submit"
+                            disabled={isSubmitting}
                             className="px-4 py-2 text-sm font-medium text-white cursor-pointer
                                 bg-[#008080] rounded-md hover:bg-[#006666] focus:outline-none 
-                                focus:ring-2 focus:ring-offset-2 focus:ring-[#008080]"
+                                focus:ring-2 focus:ring-offset-2 focus:ring-[#008080]
+                                disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Create Customer
+                            {isSubmitting ? 'Procesando...' : 'Create Customer'}
                         </button>
                     </div>
                 </form>
