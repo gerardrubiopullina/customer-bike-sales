@@ -83,7 +83,8 @@ export default function CustomersSummary() {
           {clusters.map(cluster => (
             <div 
               key={cluster.id} 
-              className="bg-slate-50 rounded-lg p-2.5 transition-all duration-200 hover:shadow-sm cursor-pointer w-auto"
+              className="p-2.5 rounded-lg transition-all duration-200 hover:shadow-sm cursor-pointer 
+                w-auto border-b border-slate-200"
             >
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center">
