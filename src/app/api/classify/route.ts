@@ -9,7 +9,7 @@ export async function POST(request: Request) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify({ customer: body })
         });
 
         if (!response.ok) {
