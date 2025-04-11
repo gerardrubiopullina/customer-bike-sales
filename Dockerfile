@@ -1,5 +1,5 @@
 FROM rocker/r-ver:4.3.1
-RUN install.packages("plumber")
+RUN R -e "install.packages('plumber')"
 COPY . /app
 WORKDIR /app
 EXPOSE 8000
