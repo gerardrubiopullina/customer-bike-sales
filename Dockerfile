@@ -1,6 +1,11 @@
-FROM rocker/plumber:latest
+FROM rocker/r-ver:4.3.1
 
-RUN install2.r --error proxy cluster
+RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libxml2-dev \
+    libicu-dev \
+    && install2.r --error plumber proxy cluster
 
 COPY . /app
 WORKDIR /app
