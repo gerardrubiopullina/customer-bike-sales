@@ -6,6 +6,7 @@ import { Customer } from '@/app/types';
 import { useCustomers } from '@/context/CustomerContext';
 import { getClusterColorClass } from '@/functions/utils';
 import { PedalBike } from '@mui/icons-material';
+import ButtonNewCustomer from './ButtonNewCustomer';
 
 
 const CUSTOMERS_PER_PAGE = 20
@@ -56,7 +57,10 @@ export default function CustomersList() {
           <thead className="bg-slate-50 sticky top-0 z-10">
             <tr>
               <th className="px-6 py-3 text-left font-medium text-slate-500 uppercase tracking-wider bg-slate-50">
-                Customer
+                <div className="flex items-center gap-2">
+                  <span>Customer</span>
+                  <ButtonNewCustomer />
+                </div>
               </th>
               <th className="px-6 py-3 text-left font-medium text-slate-500 uppercase tracking-wider bg-slate-50">
                 Location
