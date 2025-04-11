@@ -1,5 +1,5 @@
 FROM rocker/r-ver:4.3.1
-RUN R -e "install.packages('plumber')"
+RUN R -e "install.packages(c('plumber', 'proxy', 'cluster')"
 COPY . /app
 WORKDIR /app
 EXPOSE 8000
