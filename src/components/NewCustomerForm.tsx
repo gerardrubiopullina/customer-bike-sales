@@ -3,7 +3,6 @@ import { GENDERS, MARITAL_STATUS } from "@/context/FilterContext";
 import { useState } from "react";
 
 export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
-
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         firstName: '',
@@ -17,14 +16,19 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
         yearlyIncome: '',
         avgMonthSpend: '',
         numberCarsOwned: '',
-        numberChildrenAtHome: ''
+        numberChildrenAtHome: '',
+        occupation: '',
+        education: '',
+        countryRegion: '',
+        homeOwnerFlag: false,
+        totalChildren: ''
     });
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        const { id, value } = e.target;
+        const { id, value, type } = e.target;
         setFormData(prev => ({
             ...prev,
-            [id]: value
+            [id]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
         }));
     };
     
@@ -33,12 +37,28 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
         setIsSubmitting(true);
         
         try {
+            const apiData = {
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                gender: formData.gender,
+                maritalStatus: formData.maritalStatus,
+                age: formData.age,
+                yearlyIncome: formData.yearlyIncome,
+                occupation: formData.occupation,
+                education: formData.education,
+                countryRegion: formData.countryRegion,
+                homeOwnerFlag: formData.homeOwnerFlag,
+                numberCarsOwned: formData.numberCarsOwned,
+                numberChildrenAtHome: formData.numberChildrenAtHome,
+                totalChildren: formData.totalChildren
+            };
+
             const response = await fetch('/api/classify', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(apiData)
             });
             
             if (!response.ok) {
@@ -174,12 +194,13 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
 
                         <div>
                             <label htmlFor="maritalStatus" className="block text-sm font-medium text-[#003366] mb-1">
-                                Marital Status
+                                Marital Status *
                             </label>
                             <select
                                 id="maritalStatus"
                                 value={formData.maritalStatus}
                                 onChange={handleChange}
+                                required
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                             >
                                 {MARITAL_STATUS.map((status) => (
@@ -192,13 +213,14 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
 
                         <div>
                             <label htmlFor="age" className="block text-sm font-medium text-[#003366] mb-1">
-                                Age
+                                Age *
                             </label>
                             <input
                                 type="number"
                                 id="age"
                                 value={formData.age}
                                 onChange={handleChange}
+                                required
                                 min="0"
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                                 placeholder="Enter age"
@@ -209,13 +231,14 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label htmlFor="yearlyIncome" className="block text-sm font-medium text-[#003366] mb-1">
-                                Yearly Income
+                                Yearly Income *
                             </label>
                             <input
                                 type="number"
                                 id="yearlyIncome"
                                 value={formData.yearlyIncome}
                                 onChange={handleChange}
+                                required
                                 min="0"
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                                 placeholder="Enter yearly income"
@@ -240,14 +263,77 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
+                            <label htmlFor="occupation" className="block text-sm font-medium text-[#003366] mb-1">
+                                Occupation *
+                            </label>
+                            <input
+                                type="text"
+                                id="occupation"
+                                value={formData.occupation}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
+                                placeholder="Enter occupation"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="education" className="block text-sm font-medium text-[#003366] mb-1">
+                                Education *
+                            </label>
+                            <input
+                                type="text"
+                                id="education"
+                                value={formData.education}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
+                                placeholder="Enter education level"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label htmlFor="countryRegion" className="block text-sm font-medium text-[#003366] mb-1">
+                                Country/Region *
+                            </label>
+                            <input
+                                type="text"
+                                id="countryRegion"
+                                value={formData.countryRegion}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
+                                placeholder="Enter country/region"
+                            />
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                id="homeOwnerFlag"
+                                checked={formData.homeOwnerFlag}
+                                onChange={handleChange}
+                                className="h-4 w-4 text-[#008080] focus:ring-[#008080] border-slate-300 rounded"
+                            />
+                            <label htmlFor="homeOwnerFlag" className="text-sm font-medium text-[#003366]">
+                                Home Owner *
+                            </label>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4">
+                        <div>
                             <label htmlFor="numberCarsOwned" className="block text-sm font-medium text-[#003366] mb-1">
-                                Number of Cars
+                                Number of Cars *
                             </label>
                             <input
                                 type="number"
                                 id="numberCarsOwned"
                                 value={formData.numberCarsOwned}
                                 onChange={handleChange}
+                                required
                                 min="0"
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                                 placeholder="Enter number of cars"
@@ -256,16 +342,33 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
 
                         <div>
                             <label htmlFor="numberChildrenAtHome" className="block text-sm font-medium text-[#003366] mb-1">
-                                Children at Home
+                                Children at Home *
                             </label>
                             <input
                                 type="number"
                                 id="numberChildrenAtHome"
                                 value={formData.numberChildrenAtHome}
                                 onChange={handleChange}
+                                required
                                 min="0"
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
                                 placeholder="Enter number of children at home"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="totalChildren" className="block text-sm font-medium text-[#003366] mb-1">
+                                Total Children *
+                            </label>
+                            <input
+                                type="number"
+                                id="totalChildren"
+                                value={formData.totalChildren}
+                                onChange={handleChange}
+                                required
+                                min="0"
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent"
+                                placeholder="Enter total number of children"
                             />
                         </div>
                     </div>
