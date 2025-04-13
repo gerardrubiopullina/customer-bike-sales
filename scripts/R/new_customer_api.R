@@ -50,33 +50,39 @@ function(firstName, lastName, gender, maritalStatus, age, yearlyIncome,
   
   # Validar y convertir los datos de entrada
   tryCatch({
-    # Imprimir los tipos de datos recibidos
-    print(paste("Tipos de datos recibidos:"))
-    print(paste("age:", class(age), age))
-    print(paste("yearlyIncome:", class(yearlyIncome), yearlyIncome))
-    print(paste("homeOwnerFlag:", class(homeOwnerFlag), homeOwnerFlag))
-    print(paste("numberCarsOwned:", class(numberCarsOwned), numberCarsOwned))
-    print(paste("numberChildrenAtHome:", class(numberChildrenAtHome), numberChildrenAtHome))
-    print(paste("totalChildren:", class(totalChildren), totalChildren))
+    # Imprimir los datos recibidos
+    print("Datos recibidos:")
+    print(list(
+      age = age,
+      yearlyIncome = yearlyIncome,
+      homeOwnerFlag = homeOwnerFlag,
+      numberCarsOwned = numberCarsOwned,
+      numberChildrenAtHome = numberChildrenAtHome,
+      totalChildren = totalChildren
+    ))
     
-    # Convertir y validar datos numéricos
-    if (is.null(age) || is.na(age)) {
-      return(list(error = "Age is required and must be a number"))
-    }
-    if (is.null(yearlyIncome) || is.na(yearlyIncome)) {
-      return(list(error = "Yearly income is required and must be a number"))
-    }
+    # Convertir todos los valores numéricos a double
+    age <- as.double(age)
+    yearlyIncome <- as.double(yearlyIncome)
+    homeOwnerFlag <- as.double(homeOwnerFlag)
+    numberCarsOwned <- as.double(numberCarsOwned)
+    numberChildrenAtHome <- as.double(numberChildrenAtHome)
+    totalChildren <- as.double(totalChildren)
     
-    age <- as.numeric(age)
-    yearlyIncome <- as.numeric(yearlyIncome)
-    homeOwnerFlag <- as.numeric(homeOwnerFlag)
-    numberCarsOwned <- as.numeric(numberCarsOwned)
-    numberChildrenAtHome <- as.numeric(numberChildrenAtHome)
-    totalChildren <- as.numeric(totalChildren)
+    # Imprimir los datos después de la conversión
+    print("Datos después de la conversión:")
+    print(list(
+      age = age,
+      yearlyIncome = yearlyIncome,
+      homeOwnerFlag = homeOwnerFlag,
+      numberCarsOwned = numberCarsOwned,
+      numberChildrenAtHome = numberChildrenAtHome,
+      totalChildren = totalChildren
+    ))
     
     # Validar que los valores numéricos sean válidos
-    if (is.na(age) || is.na(yearlyIncome) || is.na(homeOwnerFlag) || 
-        is.na(numberCarsOwned) || is.na(numberChildrenAtHome) || is.na(totalChildren)) {
+    if (any(is.na(c(age, yearlyIncome, homeOwnerFlag, numberCarsOwned, 
+                   numberChildrenAtHome, totalChildren)))) {
       return(list(error = "All numeric fields must contain valid numbers"))
     }
     
@@ -129,6 +135,17 @@ function(firstName, lastName, gender, maritalStatus, age, yearlyIncome,
     medoids_indices <- pam_model$medoids
     medoids_data <- pam_model$data[medoids_indices, ]
     
+    # Asegurar que los tipos de datos coincidan
+    for (col in names(new_customer)) {
+      if (is.factor(medoids_data[[col]])) {
+        new_customer[[col]] <- factor(new_customer[[col]], levels = levels(medoids_data[[col]]))
+      } else if (is.numeric(medoids_data[[col]])) {
+        new_customer[[col]] <- as.numeric(new_customer[[col]])
+      } else {
+        new_customer[[col]] <- as.character(new_customer[[col]])
+      }
+    }
+    
     # Imprimir la estructura de los medoids
     print("Estructura de los medoids:")
     print(str(medoids_data))
@@ -151,6 +168,8 @@ function(firstName, lastName, gender, maritalStatus, age, yearlyIncome,
     return(result)
   }, error = function(e) {
     print(paste("Error detallado:", e$message))
+    print("Traceback:")
+    print(traceback())
     return(list(error = paste("Error processing request:", e$message)))
   })
 }
