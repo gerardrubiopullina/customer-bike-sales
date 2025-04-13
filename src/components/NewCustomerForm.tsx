@@ -38,23 +38,20 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
         
         try {
             const apiData = {
-                customer: {
-                    firstName: formData.firstName,
-                    lastName: formData.lastName,
-                    gender: formData.gender,
-                    maritalStatus: formData.maritalStatus,
-                    age: formData.age,
-                    yearlyIncome: formData.yearlyIncome,
-                    occupation: formData.occupation,
-                    education: formData.education,
-                    countryRegion: formData.countryRegion,
-                    homeOwnerFlag: formData.homeOwnerFlag ? 1 : 0,
-                    numberCarsOwned: formData.numberCarsOwned,
-                    numberChildrenAtHome: formData.numberChildrenAtHome,
-                    totalChildren: formData.totalChildren,
-                }
-              };
-              
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                gender: formData.gender,
+                maritalStatus: formData.maritalStatus,
+                age: parseInt(formData.age),
+                yearlyIncome: parseFloat(formData.yearlyIncome),
+                occupation: formData.occupation,
+                education: formData.education,
+                countryRegion: formData.countryRegion,
+                homeOwnerFlag: formData.homeOwnerFlag ? 1 : 0,
+                numberCarsOwned: parseInt(formData.numberCarsOwned),
+                numberChildrenAtHome: parseInt(formData.numberChildrenAtHome),
+                totalChildren: parseInt(formData.totalChildren),
+            };
 
             const response = await fetch('/api/classify', {
                 method: 'POST',

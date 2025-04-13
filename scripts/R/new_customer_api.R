@@ -30,39 +30,37 @@ function() {
 }
 
 #* Classify a customer
-#* @param customer The customer data
+#* @param firstName First name of the customer
+#* @param lastName Last name of the customer
+#* @param gender Gender of the customer (M/F)
+#* @param maritalStatus Marital status (M/S)
+#* @param age Age of the customer
+#* @param yearlyIncome Yearly income
+#* @param occupation Occupation
+#* @param education Education level
+#* @param countryRegion Country or region
+#* @param homeOwnerFlag Home owner flag (0/1)
+#* @param numberCarsOwned Number of cars owned
+#* @param numberChildrenAtHome Number of children at home
+#* @param totalChildren Total number of children
 #* @post /classify
-function(customer) {
-  required_fields <- c(
-    "firstName", "lastName", "gender", "maritalStatus",
-    "age", "yearlyIncome", "occupation", "education", "countryRegion",
-    "homeOwnerFlag", "numberCarsOwned", "numberChildrenAtHome", "totalChildren"
-  )
-  missing_fields <- required_fields[!required_fields %in% names(customer)]
-
-  if (length(missing_fields) > 0) {
-    return(list(
-      error = paste("Missing required fields:", paste(missing_fields, collapse = ", "))
-    ))
-  }
-
-  # Extract medoids from the PAM model
-  medoids_indices <- pam_model$medoids
-  medoids_data <- pam_model$data[medoids_indices, ]
+function(firstName, lastName, gender, maritalStatus, age, yearlyIncome, 
+         occupation, education, countryRegion, homeOwnerFlag, 
+         numberCarsOwned, numberChildrenAtHome, totalChildren) {
   
   # Prepare customer data - making sure to match the structure with original data
   new_customer <- data.frame(
-    CountryRegionName = customer$countryRegion,
-    Education = customer$education,
-    Occupation = customer$occupation,
-    Gender = customer$gender,
-    MaritalStatus = customer$maritalStatus,
-    HomeOwnerFlag = as.factor(customer$homeOwnerFlag),
-    NumberCarsOwned = as.integer(customer$numberCarsOwned),
-    NumberChildrenAtHome = as.integer(customer$numberChildrenAtHome),
-    TotalChildren = as.integer(customer$totalChildren),
-    YearlyIncome = as.numeric(customer$yearlyIncome),
-    Age = as.integer(customer$age),
+    CountryRegionName = countryRegion,
+    Education = education,
+    Occupation = occupation,
+    Gender = gender,
+    MaritalStatus = maritalStatus,
+    HomeOwnerFlag = as.factor(homeOwnerFlag),
+    NumberCarsOwned = as.integer(numberCarsOwned),
+    NumberChildrenAtHome = as.integer(numberChildrenAtHome),
+    TotalChildren = as.integer(totalChildren),
+    YearlyIncome = as.numeric(yearlyIncome),
+    Age = as.integer(age),
     stringsAsFactors = FALSE
   )
   
@@ -77,7 +75,10 @@ function(customer) {
     }
   }
   
-
+  # Extract medoids from the PAM model
+  medoids_indices <- pam_model$medoids
+  medoids_data <- pam_model$data[medoids_indices, ]
+  
   # Calculate Gower distance to each medoid
   gower_dist <- proxy::dist(new_customer, medoids_data, method = "gower")
   
@@ -87,28 +88,10 @@ function(customer) {
   # Find the closest medoid
   cluster_assignment <- which.min(dist_matrix[1,])
   
-  # Calculate probabilities based on inverse distance
-  inverse_distances <- 1/dist_matrix[1,]
-  probabilities <- inverse_distances / sum(inverse_distances)
-  
-  # Get buyer probability based on historical analysis
-  # These values should match your clustering analysis
-  bike_buyer_prob <- c(
-    "1" = "Medium (65%)", 
-    "2" = "Low (45%)", 
-    "3" = "High (85%)"
-  )
-  
   result <- list(
-    message = paste0(customer$firstName, " ", customer$lastName, 
+    message = paste0(firstName, " ", lastName, 
                      " has been classified to cluster ", cluster_assignment),
-    cluster = as.integer(cluster_assignment),
-    clusterProbabilities = list(
-      cluster1 = round(probabilities[1], 2),
-      cluster2 = round(probabilities[2], 2),
-      cluster3 = round(probabilities[3], 2)
-    ),
-    bikeBuyerProbability = bike_buyer_prob[as.character(cluster_assignment)]
+    cluster = as.integer(cluster_assignment)
   )
   
   return(result)
