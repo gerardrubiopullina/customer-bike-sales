@@ -50,12 +50,35 @@ function(firstName, lastName, gender, maritalStatus, age, yearlyIncome,
   
   # Validar y convertir los datos de entrada
   tryCatch({
-    age <- as.integer(age)
+    # Imprimir los tipos de datos recibidos
+    print(paste("Tipos de datos recibidos:"))
+    print(paste("age:", class(age), age))
+    print(paste("yearlyIncome:", class(yearlyIncome), yearlyIncome))
+    print(paste("homeOwnerFlag:", class(homeOwnerFlag), homeOwnerFlag))
+    print(paste("numberCarsOwned:", class(numberCarsOwned), numberCarsOwned))
+    print(paste("numberChildrenAtHome:", class(numberChildrenAtHome), numberChildrenAtHome))
+    print(paste("totalChildren:", class(totalChildren), totalChildren))
+    
+    # Convertir y validar datos numéricos
+    if (is.null(age) || is.na(age)) {
+      return(list(error = "Age is required and must be a number"))
+    }
+    if (is.null(yearlyIncome) || is.na(yearlyIncome)) {
+      return(list(error = "Yearly income is required and must be a number"))
+    }
+    
+    age <- as.numeric(age)
     yearlyIncome <- as.numeric(yearlyIncome)
-    homeOwnerFlag <- as.integer(homeOwnerFlag)
-    numberCarsOwned <- as.integer(numberCarsOwned)
-    numberChildrenAtHome <- as.integer(numberChildrenAtHome)
-    totalChildren <- as.integer(totalChildren)
+    homeOwnerFlag <- as.numeric(homeOwnerFlag)
+    numberCarsOwned <- as.numeric(numberCarsOwned)
+    numberChildrenAtHome <- as.numeric(numberChildrenAtHome)
+    totalChildren <- as.numeric(totalChildren)
+    
+    # Validar que los valores numéricos sean válidos
+    if (is.na(age) || is.na(yearlyIncome) || is.na(homeOwnerFlag) || 
+        is.na(numberCarsOwned) || is.na(numberChildrenAtHome) || is.na(totalChildren)) {
+      return(list(error = "All numeric fields must contain valid numbers"))
+    }
     
     # Validar que los valores numéricos sean positivos
     if (age <= 0 || yearlyIncome <= 0 || numberCarsOwned < 0 || 
@@ -87,6 +110,10 @@ function(firstName, lastName, gender, maritalStatus, age, yearlyIncome,
       stringsAsFactors = FALSE
     )
     
+    # Imprimir la estructura del data frame
+    print("Estructura del data frame:")
+    print(str(new_customer))
+    
     # Ensure factor levels match the originals
     for (col in names(new_customer)) {
       if (is.factor(df_clean[[col]])) {
@@ -94,9 +121,17 @@ function(firstName, lastName, gender, maritalStatus, age, yearlyIncome,
       }
     }
     
+    # Imprimir la estructura del data frame después de la conversión
+    print("Estructura del data frame después de la conversión:")
+    print(str(new_customer))
+    
     # Extract medoids from the PAM model
     medoids_indices <- pam_model$medoids
     medoids_data <- pam_model$data[medoids_indices, ]
+    
+    # Imprimir la estructura de los medoids
+    print("Estructura de los medoids:")
+    print(str(medoids_data))
     
     # Calculate Gower distance to each medoid
     gower_dist <- proxy::dist(new_customer, medoids_data, method = "gower")
@@ -115,6 +150,7 @@ function(firstName, lastName, gender, maritalStatus, age, yearlyIncome,
     
     return(result)
   }, error = function(e) {
+    print(paste("Error detallado:", e$message))
     return(list(error = paste("Error processing request:", e$message)))
   })
 }
