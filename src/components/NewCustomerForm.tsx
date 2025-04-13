@@ -47,7 +47,7 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
                 occupation: formData.occupation,
                 education: formData.education,
                 countryRegion: formData.countryRegion,
-                homeOwnerFlag: formData.homeOwnerFlag,
+                homeOwnerFlag: formData.homeOwnerFlag ? 1 : 0,
                 numberCarsOwned: formData.numberCarsOwned,
                 numberChildrenAtHome: formData.numberChildrenAtHome,
                 totalChildren: formData.totalChildren

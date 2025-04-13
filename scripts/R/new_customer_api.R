@@ -23,6 +23,12 @@ function(req, res) {
   plumber::forward()
 }
 
+#* Test endpoint
+#* @get /test
+function() {
+  return(list(status = "API is running"))
+}
+
 #* Classify a customer
 #* @param customer The customer data
 #* @post /classify
