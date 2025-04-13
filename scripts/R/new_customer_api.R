@@ -48,52 +48,74 @@ function(firstName, lastName, gender, maritalStatus, age, yearlyIncome,
          occupation, education, countryRegion, homeOwnerFlag, 
          numberCarsOwned, numberChildrenAtHome, totalChildren) {
   
-  # Prepare customer data - making sure to match the structure with original data
-  new_customer <- data.frame(
-    CountryRegionName = countryRegion,
-    Education = education,
-    Occupation = occupation,
-    Gender = gender,
-    MaritalStatus = maritalStatus,
-    HomeOwnerFlag = as.factor(homeOwnerFlag),
-    NumberCarsOwned = as.integer(numberCarsOwned),
-    NumberChildrenAtHome = as.integer(numberChildrenAtHome),
-    TotalChildren = as.integer(totalChildren),
-    YearlyIncome = as.numeric(yearlyIncome),
-    Age = as.integer(age),
-    stringsAsFactors = FALSE
-  )
-  
-  # Ensure factor levels match the originals
-  for (col in names(new_customer)) {
-    if (is.factor(df_clean[[col]])) {
-      new_customer[[col]] <- factor(new_customer[[col]], levels = levels(df_clean[[col]]))
-    } else if (is.numeric(df_clean[[col]])) {
-      new_customer[[col]] <- as.numeric(new_customer[[col]])
-    } else {
-      new_customer[[col]] <- as.character(new_customer[[col]])
+  # Validar y convertir los datos de entrada
+  tryCatch({
+    age <- as.integer(age)
+    yearlyIncome <- as.numeric(yearlyIncome)
+    homeOwnerFlag <- as.integer(homeOwnerFlag)
+    numberCarsOwned <- as.integer(numberCarsOwned)
+    numberChildrenAtHome <- as.integer(numberChildrenAtHome)
+    totalChildren <- as.integer(totalChildren)
+    
+    # Validar que los valores numéricos sean positivos
+    if (age <= 0 || yearlyIncome <= 0 || numberCarsOwned < 0 || 
+        numberChildrenAtHome < 0 || totalChildren < 0) {
+      return(list(error = "Invalid numeric values"))
     }
-  }
-  
-  # Extract medoids from the PAM model
-  medoids_indices <- pam_model$medoids
-  medoids_data <- pam_model$data[medoids_indices, ]
-  
-  # Calculate Gower distance to each medoid
-  gower_dist <- proxy::dist(new_customer, medoids_data, method = "gower")
-  
-  # Convert to matrix
-  dist_matrix <- as.matrix(gower_dist)
-  
-  # Find the closest medoid
-  cluster_assignment <- which.min(dist_matrix[1,])
-  
-  result <- list(
-    message = paste0(firstName, " ", lastName, 
-                     " has been classified to cluster ", cluster_assignment),
-    cluster = as.integer(cluster_assignment)
-  )
-  
-  return(result)
+    
+    # Validar que gender y maritalStatus sean válidos
+    if (!gender %in% c("M", "F")) {
+      return(list(error = "Invalid gender value"))
+    }
+    if (!maritalStatus %in% c("M", "S")) {
+      return(list(error = "Invalid marital status value"))
+    }
+    
+    # Prepare customer data - making sure to match the structure with original data
+    new_customer <- data.frame(
+      CountryRegionName = as.character(countryRegion),
+      Education = as.character(education),
+      Occupation = as.character(occupation),
+      Gender = as.character(gender),
+      MaritalStatus = as.character(maritalStatus),
+      HomeOwnerFlag = factor(homeOwnerFlag, levels = c(0, 1)),
+      NumberCarsOwned = numberCarsOwned,
+      NumberChildrenAtHome = numberChildrenAtHome,
+      TotalChildren = totalChildren,
+      YearlyIncome = yearlyIncome,
+      Age = age,
+      stringsAsFactors = FALSE
+    )
+    
+    # Ensure factor levels match the originals
+    for (col in names(new_customer)) {
+      if (is.factor(df_clean[[col]])) {
+        new_customer[[col]] <- factor(new_customer[[col]], levels = levels(df_clean[[col]]))
+      }
+    }
+    
+    # Extract medoids from the PAM model
+    medoids_indices <- pam_model$medoids
+    medoids_data <- pam_model$data[medoids_indices, ]
+    
+    # Calculate Gower distance to each medoid
+    gower_dist <- proxy::dist(new_customer, medoids_data, method = "gower")
+    
+    # Convert to matrix
+    dist_matrix <- as.matrix(gower_dist)
+    
+    # Find the closest medoid
+    cluster_assignment <- which.min(dist_matrix[1,])
+    
+    result <- list(
+      message = paste0(firstName, " ", lastName, 
+                       " has been classified to cluster ", cluster_assignment),
+      cluster = as.integer(cluster_assignment)
+    )
+    
+    return(result)
+  }, error = function(e) {
+    return(list(error = paste("Error processing request:", e$message)))
+  })
 }
 
