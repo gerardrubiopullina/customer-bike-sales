@@ -69,11 +69,14 @@ function(customer) {
   # Ensure factor levels match the originals
   for (col in names(new_customer)) {
     if (is.factor(df_clean[[col]])) {
-      # Convert column to factor with the same levels as in training data
-      new_customer[[col]] <- factor(new_customer[[col]], 
-                                    levels = levels(df_clean[[col]]))
+      new_customer[[col]] <- factor(new_customer[[col]], levels = levels(df_clean[[col]]))
+    } else if (is.numeric(df_clean[[col]])) {
+      new_customer[[col]] <- as.numeric(new_customer[[col]])
+    } else {
+      new_customer[[col]] <- as.character(new_customer[[col]])
     }
   }
+  
 
   # Calculate Gower distance to each medoid
   gower_dist <- proxy::dist(new_customer, medoids_data, method = "gower")
