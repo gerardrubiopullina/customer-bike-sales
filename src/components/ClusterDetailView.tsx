@@ -49,7 +49,10 @@ export default function ClusterDetailView() {
 
     return (
         <div className="h-full bg-white rounded-lg shadow-sm flex flex-col">
-            <div className="h-1/5">
+            <div className="h-1/5 relative">
+                <p className="absolute left-0 text-sm font-medium text-white px-2 py-1 z-10">
+                    Buyers: {bikeBuyers.toLocaleString()} ({buyerPercentage}%)
+                </p>
                 <ResponsiveContainer width="100%" height="200%">
                     <BarChart
                         data={chartData}
@@ -78,16 +81,6 @@ export default function ClusterDetailView() {
                             name="Compradores de Bicis"
                             fill={`var(--${getClusterColorClass(clusterId).replace('-bg', '')})`}
                             stackId="a"
-                            label={{
-                                position: 'insideStart',
-                                content: ({ value }: { value?: number | string }) => {
-                                const numValue = typeof value === 'number' ? value : 0;
-                                return `${numValue.toLocaleString()} (${buyerPercentage}%)`;
-                                },
-                                fill: 'white',
-                                fontSize: 12,
-                                fontWeight: 500
-                            }}
                         />
                         <Bar
                             dataKey="nonBuyers"
