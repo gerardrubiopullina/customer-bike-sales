@@ -3,6 +3,7 @@ import { GENDERS, MARITAL_STATUS } from "@/context/FilterContext";
 import { useState } from "react";
 
 export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         firstName: '',
@@ -38,31 +39,37 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
         
         try {
             const apiData = {
-                firstName: formData.firstName,
-                lastName: formData.lastName,
+                countryRegionName: formData.countryRegion,
+                education: formData.education,
+                occupation: formData.occupation,
                 gender: formData.gender,
                 maritalStatus: formData.maritalStatus,
-                age: parseInt(formData.age),
-                yearlyIncome: parseFloat(formData.yearlyIncome),
-                occupation: formData.occupation,
-                education: formData.education,
-                countryRegion: formData.countryRegion,
                 homeOwnerFlag: formData.homeOwnerFlag ? 1 : 0,
                 numberCarsOwned: parseInt(formData.numberCarsOwned),
                 numberChildrenAtHome: parseInt(formData.numberChildrenAtHome),
                 totalChildren: parseInt(formData.totalChildren),
+                yearlyIncome: parseFloat(formData.yearlyIncome),
+                age: parseInt(formData.age)
             };
 
-            const response = await fetch('/api/classify', {
-                method: 'POST',
+            // Construir la URL con los parámetros de consulta
+            const queryParams = new URLSearchParams();
+            for (const [key, value] of Object.entries(apiData)) {
+                queryParams.append(key, value.toString());
+            }
+            
+            const url = `/api/predict?${queryParams.toString()}`;
+            
+            const response = await fetch(url, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(apiData)
+                }
             });
             
             if (!response.ok) {
-                throw new Error('Error en la llamada a la API');
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Error en la llamada a la API');
             }
             
             const result = await response.json();
@@ -71,12 +78,12 @@ export default function NewCustomerForm({ onClose }: { onClose: () => void }) {
             if (result.error) {
                 alert(result.error);
             } else {
-                alert(result.message);
+                alert(`Cliente clasificado en el cluster ${result.cluster} con una confianza del ${(result.confidence * 100).toFixed(2)}%`);
                 onClose();
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Error al procesar la solicitud');
+            alert(`Error: ${error instanceof Error ? error.message : 'Error al procesar la solicitud'}`);
         } finally {
             setIsSubmitting(false);
         }
