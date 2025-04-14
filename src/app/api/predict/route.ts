@@ -28,8 +28,6 @@ export async function GET(request: Request) {
             return NextResponse.json(data);
         } catch (fetchError) {
             console.error('Error fetching external API:', fetchError);
-            
-            // Verificar si es un error de conexión o timeout
             if (fetchError instanceof TypeError && fetchError.message.includes('fetch')) {
                 return NextResponse.json(
                     { 

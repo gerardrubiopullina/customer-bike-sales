@@ -18,6 +18,8 @@ export const CLUSTERS = ["1", "2", "3"];
 export const CLUSTERS_COLORS_CLASS = ["cluster-1-bg", "cluster-2-bg", "cluster-3-bg"];
 export const GENDERS = ["All", "M", "F"];
 export const MARITAL_STATUS = ["S", "M"];
+export const EDUCATION_OPTIONS = ["Bachelors", "Graduate Degree", "High School", "Partial College", "Partial High School"];
+export const OCCUPATION_OPTIONS = ["Clerical", "Management", "Manual", "Professional", "Skilled Manual"];
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
 
