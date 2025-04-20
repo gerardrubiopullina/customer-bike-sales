@@ -20,9 +20,9 @@ The project is divided into two main parts:
 
 ### 1. Statistical Analysis and clusterization (R)
 - Exploratory Data Analysis (EDA)
-- Sales Predictive Modeling
 - Customer Segmentation
-- Temporal Trend Analysis
+- Sales Predictive Modeling
+- Demographic analysis
 - Advanced Statistical Visualizations
 
 ### 2. Interactive Dashboard (Next.js)
