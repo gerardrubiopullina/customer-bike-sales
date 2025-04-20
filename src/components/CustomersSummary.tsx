@@ -3,13 +3,11 @@
 import { useCustomers } from "@/context/CustomerContext";
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
-// Colores consistentes con los demás componentes
 const COLORS = ["#008080", "#003366", "#ff7f0e"];
 
 export default function CustomersSummary() {
   const { filteredCustomers } = useCustomers();
 
-  // Agrupar datos por cluster
   const clusterData = filteredCustomers.reduce((acc, customer) => {
     const clusterId = customer.clustering;
     
@@ -31,14 +29,12 @@ export default function CustomersSummary() {
     return acc;
   }, {} as Record<string, { id: string; name: string; totalCustomers: number; bikeBuyers: number; color: string }>);
 
-  // Convertir a array y calcular porcentajes
   const clusters = Object.values(clusterData).map(cluster => ({
     ...cluster,
     nonBuyers: cluster.totalCustomers - cluster.bikeBuyers,
     buyerPercentage: ((cluster.bikeBuyers / cluster.totalCustomers) * 100).toFixed(1)
   }));
 
-  // Datos para el gráfico de pie único
   const pieData = clusters.map(cluster => ({
     name: `Cluster ${cluster.id}`,
     value: cluster.totalCustomers,

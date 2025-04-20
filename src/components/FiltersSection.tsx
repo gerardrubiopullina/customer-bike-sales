@@ -18,6 +18,10 @@ export default function FiltersSidebar() {
     ).sort();
 
     const handleClusterClick = (clusterId: string) => {
+        if (filters.selectedClusters.length === 1 && filters.selectedClusters.includes(clusterId)) {
+            return;
+        }
+        
         setFilters({
             ...filters,
             selectedClusters: filters.selectedClusters.includes(clusterId)
