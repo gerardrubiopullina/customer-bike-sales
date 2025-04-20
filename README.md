@@ -8,11 +8,11 @@ A data science and visualization project that explores bicycle sales patterns us
 ![image](https://github.com/user-attachments/assets/dfcda7d0-e777-4767-bf80-f6a181d4a082)
 
 ### Analysis and clusterization
+**This analysis can be found in my kaggle notebook:** [See notebook](https://www.kaggle.com/code/gerardrubio00/clustering-and-analysis-bike-customers)
+
 ![image](https://github.com/user-attachments/assets/117d71dd-f3bb-4df2-98cb-fad109e67f70)
 ![image](https://github.com/user-attachments/assets/7f0f8b2d-c6c9-4bae-a5ef-49861e995768)
 
-
-**This analysis can be found in my kagge notebook:** [See notebook](https://www.kaggle.com/code/gerardrubio00/clustering-and-analysis-bike-customers)
 
 ## Project Structure
 
@@ -30,7 +30,7 @@ The project is divided into two main parts:
 - Responsive Charts
 - Dynamic Filters in the right sidebar
   
-  ![image](https://github.com/user-attachments/assets/b0518544-fca1-4985-926b-633cf17de4f1)
+  ![image](https://github.com/user-attachments/assets/f1cbfdd9-d95b-4725-b397-d3274d940048)
 
 
 ## Key Features
