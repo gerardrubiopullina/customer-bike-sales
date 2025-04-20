@@ -178,7 +178,7 @@ export default function IncomePerAgeChart() {
                             dataKey="avgIncome"
                             name="AvgIncome"
                             scale="log"
-                            domain={[ //auto domain with margins
+                            domain={[
                                 (dataMin: number) => Math.max(1000, dataMin * 0.9),
                                 (dataMax: number) => dataMax * 1.1,
                             ]}

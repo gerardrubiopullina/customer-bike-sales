@@ -1,5 +1,3 @@
-// import { useState } from "react";
-
 
 interface SelectorProps {
     options: string[];
@@ -8,13 +6,6 @@ interface SelectorProps {
 }
 
 export function Selector({ options, value, onChange }: SelectorProps) {
-
-    // const [selectedValue, setSelectedValue] = useState(defaultValue);
-
-    // const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    //     setSelectedValue(event.target.value);
-    // };
-
     return (
         <select
             value={value}
