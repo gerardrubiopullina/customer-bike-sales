@@ -2,7 +2,7 @@
 
 A data science and visualization project that explores bicycle sales patterns using the Adventure Works (AW) database. The project combines advanced statistical analysis with interactive visualization to provide valuable insights into sales behavior, focusing on clustering algorithms to understand types of customers groups and which of them will buy the main product.
 
-🖥️ Live Demo: Comming soon!
+🖥️ Live Demo: https://customer-bike-sales.vercel.app/
 
 ### FInal Dashboard
 ![image](https://github.com/user-attachments/assets/dfcda7d0-e777-4767-bf80-f6a181d4a082)
