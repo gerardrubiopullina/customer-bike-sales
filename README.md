@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bike Sales Analysis - Interactive Dashboard
 
-## Getting Started
+A data science and visualization project that explores bicycle sales patterns using the Adventure Works (AW) database. The project combines advanced statistical analysis with interactive visualization to provide valuable insights into sales behavior, focusing on clustering algorithms to understand types of customers groups and which of them will buy the main product.
 
-First, run the development server:
+🖥️ Live Demo: Comming soon!
 
+### FInal Dashboard
+![image](https://github.com/user-attachments/assets/dfcda7d0-e777-4767-bf80-f6a181d4a082)
+
+### Analysis and clusterization
+![image](https://github.com/user-attachments/assets/117d71dd-f3bb-4df2-98cb-fad109e67f70)
+![image](https://github.com/user-attachments/assets/7f0f8b2d-c6c9-4bae-a5ef-49861e995768)
+
+
+**This analysis can be found in my kagge notebook:** [See notebook](https://www.kaggle.com/code/gerardrubio00/clustering-and-analysis-bike-customers)
+
+## Project Structure
+
+The project is divided into two main parts:
+
+### 1. Statistical Analysis and clusterization (R)
+- Exploratory Data Analysis (EDA)
+- Sales Predictive Modeling
+- Customer Segmentation
+- Temporal Trend Analysis
+- Advanced Statistical Visualizations
+
+### 2. Interactive Dashboard (Next.js)
+- Interactive Data Visualization
+- Responsive Charts
+- Dynamic Filters in the right sidebar
+  
+  ![image](https://github.com/user-attachments/assets/b0518544-fca1-4985-926b-633cf17de4f1)
+
+
+## Key Features
+- **Deep Analysis**: Detailed insights into sales patterns focusing on cluster results
+- **Interactive Visualization**: Dynamic and responsive dashboard
+- **Responsive Design**
+- **Api call using R and plumber to get the closest medoid for a new customer**: Live on [render.com](https://render.com/)
+  
+  ![image](https://github.com/user-attachments/assets/1d507b32-d92c-4321-a093-71f4445e3c87)
+
+## Tech Stack
+- **Backend & Analysis**:
+  - [R](https://cran.rstudio.com/)
+  - [Docker](https://www.docker.com/)
+  - [Tidyverse](https://www.tidyverse.org/)
+  - [cluster](https://cran.r-project.org/web/packages/cluster/index.html)
+  - [plumber](https://www.rplumber.io/) - Create R api
+  - [Render.com](https://render.com/) - Live server for the api
+- **Frontend**:
+  - [Next.js](https://nextjs.org/)
+  - [Typescript](https://www.typescriptlang.org/)
+  - [Tailwind CSS](https://tailwindcss.com/)
+  - [recharts](https://recharts.org/en-US/) - Charts visualizations
+
+## Database
+This project uses the Adventure Works (AW) sample database, a Microsoft database that simulates a bicycle sales company. Extracted from [kaggle](https://www.kaggle.com/)
+💽 Explore the dataset: https://www.kaggle.com/datasets/jahias/microsoft-adventure-works-cycles-customer-data
+
+## Installation and Setup
+
+### Prerequisites
+- Next.js
+- npm/yarn
+- R
+
+### Installation Steps
+
+1. Clone the repository
+```bash
+git clone https://github.com/gerardrubiopullina/customer-bike-sales.git
+cd customer-bike-sales
+```
+
+2. Install dependencies
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Start the development server
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Usage
+1. Access the dashboard at http://localhost:3000
+2. Use the filters to select specific data
+3. Explore different dashboard sections
+4. Explore the data analysis done in R in the /scripts/R folder
+5. **Try the clusterization API clicking in the ➕ button next to the first column title in the customers list and filling the form.** Take into account that as a sample project, the server automatically gets in sleep mode after 15 minutes of inactivity, which can make the api response to be a few seconds longer than usual.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Contact
+[Linkedin](https://www.linkedin.com/in/gerard-rubi%C3%B3-pullina-a88992243/)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+[Github](https://github.com/gerardrubiopullina)
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[Kaggle](https://www.kaggle.com/gerardrubio00)
