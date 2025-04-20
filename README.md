@@ -57,6 +57,7 @@ The project is divided into two main parts:
 
 ## Database
 This project uses the Adventure Works (AW) sample database, a Microsoft database that simulates a bicycle sales company. Extracted from [kaggle](https://www.kaggle.com/)
+
 💽 Explore the dataset: https://www.kaggle.com/datasets/jahias/microsoft-adventure-works-cycles-customer-data
 
 ## Installation and Setup
