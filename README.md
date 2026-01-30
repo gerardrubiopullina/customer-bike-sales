@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bike Sales Analysis - Interactive Dashboard
 
-## Getting Started
+A comprehensive data analysis and visualization project that explores bicycle sales patterns using the Adventure Works (AW) database. The project combines advanced statistical analysis with interactive visualization to provide valuable insights into sales behavior.
 
-First, run the development server:
+🖥️ Live Demo: [Dashboard Link]
 
+![Dashboard Preview](path/to/your/image.png)
+
+## Project Structure
+
+The project is divided into two main parts:
+
+### 1. Statistical Analysis (R)
+- Exploratory Data Analysis (EDA)
+- Sales Predictive Modeling
+- Customer Segmentation
+- Temporal Trend Analysis
+- Advanced Statistical Visualizations
+
+### 2. Interactive Dashboard (Next.js)
+- Interactive Data Visualization
+- Dynamic Filters
+- Responsive Charts
+- Data Export
+- Multilingual Interface (English/Spanish)
+
+## Key Features
+- **Deep Analysis**: Detailed insights into sales patterns
+- **Interactive Visualization**: Dynamic and responsive dashboard
+- **Real-time Data**: Automatic metric updates
+- **Data Export**: Ability to export analysis and reports
+- **Responsive Design**: Functional on both mobile and desktop devices
+
+## Tech Stack
+- **Backend & Analysis**:
+  - R
+  - tidyverse
+  - caret
+  - ggplot2
+  - dplyr
+- **Frontend**:
+  - Next.js
+  - TypeScript
+  - Tailwind CSS
+  - Chart.js
+  - React Query
+
+## Database
+This project uses the Adventure Works (AW) sample database, a Microsoft database that simulates a bicycle sales company. The data includes:
+- Sales information
+- Customer data
+- Product catalog
+- Geographic information
+- Financial data
+
+## Installation and Setup
+
+### Prerequisites
+- Node.js
+- R
+- PostgreSQL (for AW database)
+
+### Installation Steps
+
+1. Clone the repository
+```bash
+git clone https://github.com/your-username/customer-bike-sales.git
+cd customer-bike-sales
+```
+
+2. Install dependencies
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Configure environment variables
+```env
+DATABASE_URL=your_database_url
+NEXT_PUBLIC_API_URL=your_api_url
+```
+
+4. Start the development server
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Usage
+1. Access the dashboard at http://localhost:3000
+2. Use the top filters to select date ranges
+3. Explore different dashboard sections
+4. Export data or charts as needed
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Contributing
+Contributions are welcome. Please open an issue first to discuss what you would like to change.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## License
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Contact
+Your Name - [@your_twitter](https://twitter.com/your_twitter)
+Project Link: [https://github.com/your-username/customer-bike-sales](https://github.com/your-username/customer-bike-sales)
