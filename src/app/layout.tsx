@@ -23,12 +23,12 @@ export default function RootLayout({
       <body className="flex flex-col h-screen" suppressHydrationWarning>
         <FilterProvider>
           <CustomerProvider>
-            <Header/>
-            <FiltersSection/>   
-            <main className="flex-1 overflow-hidden">
+            <Header />
+            <FiltersSection />
+            <main className="flex-1 overflow-y-auto lg:overflow-hidden">
               {children}
             </main>
-            <Footer/>
+            <Footer />
           </CustomerProvider>
         </FilterProvider>
       </body>

@@ -15,7 +15,7 @@ export default function MetricsRow() {
     const metrics = calculateMetrics(filteredCustomers);
 
     return(
-        <div className="grid grid-cols-3 gap-4 mb-4 h-full">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 h-full">
             <MetricCard
                 title="Total Customers"
                 value={metrics.totalCustomers.toLocaleString()}
