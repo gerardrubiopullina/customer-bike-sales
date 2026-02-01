@@ -155,11 +155,11 @@ export default function IncomePerAgeChart() {
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-md p-4 h-full">
-            <h2 className="uppercase tracking-wider font-semibold mb-4 text-slate-600">
+        <div className="bg-white rounded-lg shadow-md p-4 h-full min-h-0 flex flex-col">
+            <h2 className="uppercase tracking-wider font-semibold mb-2 text-slate-600 shrink-0">
                 Average yearly income per age group
             </h2>
-            <div className="w-full h-[200px]">
+            <div className="w-full flex-1 min-h-0">
                 <ResponsiveContainer width="100%" height="100%">
                     <ScatterChart margin={{ right: 20 }}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} />

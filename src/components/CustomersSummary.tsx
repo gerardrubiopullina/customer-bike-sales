@@ -6,13 +6,14 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 const COLORS = ["#008080", "#003366", "#ff7f0e"];
 
 export default function CustomersSummary() {
+
   const { filteredCustomers } = useCustomers();
 
-  const clusterData = filteredCustomers.reduce((acc, customer) => {
+  const clusterData = filteredCustomers.reduce((cl, customer) => {
     const clusterId = customer.clustering;
     
-    if (!acc[clusterId]) {
-      acc[clusterId] = {
+    if (!cl[clusterId]) {
+      cl[clusterId] = {
         id: clusterId,
         totalCustomers: 0,
         bikeBuyers: 0,
@@ -21,12 +22,12 @@ export default function CustomersSummary() {
       };
     }
     
-    acc[clusterId].totalCustomers += 1;
+    cl[clusterId].totalCustomers += 1;
     if (customer.BikeBuyer) {
-      acc[clusterId].bikeBuyers += 1;
+      cl[clusterId].bikeBuyers += 1;
     }
     
-    return acc;
+    return cl;
   }, {} as Record<string, { id: string; name: string; totalCustomers: number; bikeBuyers: number; color: string }>);
 
   const clusters = Object.values(clusterData).map(cluster => ({

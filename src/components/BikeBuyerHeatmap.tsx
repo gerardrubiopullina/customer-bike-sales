@@ -149,7 +149,7 @@ export default function BikeBuyerHeatmap() {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 h-full flex flex-col relative heatmap-container">
+    <div className="bg-white rounded-lg shadow-md p-4 lg:p-6 h-full min-h-0 flex flex-col relative heatmap-container">
       <div className="flex justify-between items-center mb-4">
         <h2 className="uppercase tracking-wide font-semibold text-slate-700 text-base">
           Bike Buyers by Household Characteristics

@@ -10,8 +10,8 @@ export default function ClusterAnalysis() {
     const {filters} = useFilters()
 
     return (
-        <div className="bg-white rounded-lg shadow-lg p-6 h-full flex flex-col">
-            <h2 className="uppercase tracking-wider font-semibold mb-4 text-slate-600 text-md">
+        <div className="bg-white rounded-lg shadow-lg p-4 lg:p-6 h-full min-h-0 flex flex-col">
+            <h2 className="uppercase tracking-wider font-semibold mb-2 lg:mb-4 text-slate-600 text-md shrink-0">
                 Customer analysis per cluster
             </h2>
             

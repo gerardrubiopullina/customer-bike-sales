@@ -56,9 +56,9 @@ export default function CustomersDistributionChart() {
   const data = prepareChartData();
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 h-full">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="uppercase tracking-wider font-semibold mb-4 text-slate-600">
+    <div className="bg-white rounded-lg shadow-md p-4 h-full min-h-0 flex flex-col">
+      <div className="flex justify-between items-center gap-3 mb-2 shrink-0">
+        <h2 className="uppercase tracking-wider font-semibold text-slate-600">
           Customers distribution by
         </h2>
         <Selector
@@ -67,14 +67,9 @@ export default function CustomersDistributionChart() {
           onChange={(value) => setGroupBy(value as GroupByKey)}
         />
       </div>
-      <div className="w-full h-[200px]">
+      <div className="w-full flex-1 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={data}
-            layout="vertical"
-            margin={{ right: 20 }}
-            barSize={20}
-          >
+          <BarChart data={data} layout="vertical" margin={{ right: 20 }} barSize={20}>
             <CartesianGrid strokeDasharray="3 3" horizontal={false} />
             <XAxis
               type="number"

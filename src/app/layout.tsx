@@ -25,7 +25,7 @@ export default function RootLayout({
           <CustomerProvider>
             <Header />
             <FiltersSection />
-            <main className="flex-1 overflow-y-auto lg:overflow-hidden">
+            <main className="dashboard-main flex-1 min-h-0 overflow-y-auto lg:overflow-hidden">
               {children}
             </main>
             <Footer />
