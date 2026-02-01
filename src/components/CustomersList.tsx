@@ -34,25 +34,16 @@ export default function CustomersList() {
     const table = tableRef.current;
     if (table) {
       const bottom = table.scrollHeight - table.scrollTop - table.clientHeight < 1;
-      if (bottom && !loading) {
+      const hasMore = displayedCustomers.length < filteredCustomers.length;
+      if (bottom && hasMore && !loading) {
         setPage((prevPage) => prevPage + 1);
       }
     }
-  }, [loading]);
-
-  useEffect(() => {
-    const table = tableRef.current;
-    if (table) {
-      table.addEventListener('scroll', handleScroll);
-      return () => {
-        if (table) table.removeEventListener('scroll', handleScroll);
-      };
-    }
-  }, [handleScroll, loading]);
+  }, [displayedCustomers.length, filteredCustomers.length, loading]);
 
   return (
     <div className="h-full card bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
-      <div className="overflow-auto flex-1" onScroll={handleScroll} ref={tableRef}>
+      <div className="overflow-auto flex-1 overscroll-contain" onScroll={handleScroll} ref={tableRef}>
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-slate-50 sticky top-0 z-10">
             <tr>

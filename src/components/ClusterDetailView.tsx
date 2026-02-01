@@ -49,15 +49,15 @@ export default function ClusterDetailView() {
 
     return (
         <div className="h-full bg-white rounded-lg shadow-sm flex flex-col">
-            <div className="h-1/5 relative">
+            <div className="relative h-20 sm:h-24 shrink-0">
                 <p className="absolute left-0 text-sm font-medium text-white px-2 py-1 z-10">
                     Buyers: {bikeBuyers.toLocaleString()} ({buyerPercentage}%)
                 </p>
-                <ResponsiveContainer width="100%" height="200%">
+                <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                         data={chartData}
                         layout="vertical"
-                        margin={{ right: 40 }}
+                        margin={{ right: 24 }}
                         barSize={30}
                         maxBarSize={30}
                     >

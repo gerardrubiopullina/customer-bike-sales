@@ -6,13 +6,14 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 const COLORS = ["#008080", "#003366", "#ff7f0e"];
 
 export default function CustomersSummary() {
+
   const { filteredCustomers } = useCustomers();
 
-  const clusterData = filteredCustomers.reduce((acc, customer) => {
+  const clusterData = filteredCustomers.reduce((cl, customer) => {
     const clusterId = customer.clustering;
     
-    if (!acc[clusterId]) {
-      acc[clusterId] = {
+    if (!cl[clusterId]) {
+      cl[clusterId] = {
         id: clusterId,
         totalCustomers: 0,
         bikeBuyers: 0,
@@ -21,12 +22,12 @@ export default function CustomersSummary() {
       };
     }
     
-    acc[clusterId].totalCustomers += 1;
+    cl[clusterId].totalCustomers += 1;
     if (customer.BikeBuyer) {
-      acc[clusterId].bikeBuyers += 1;
+      cl[clusterId].bikeBuyers += 1;
     }
     
-    return acc;
+    return cl;
   }, {} as Record<string, { id: string; name: string; totalCustomers: number; bikeBuyers: number; color: string }>);
 
   const clusters = Object.values(clusterData).map(cluster => ({
@@ -44,8 +45,8 @@ export default function CustomersSummary() {
   const totalCustomers = clusters.reduce((acc, cluster) => acc + cluster.totalCustomers, 0);
 
   return (
-    <div className="h-full flex pr-6">
-      <div className="flex-1 min-h-0">
+    <div className="h-full flex flex-col gap-4 sm:flex-row sm:gap-0 sm:pr-6">
+      <div className="w-full h-[260px] sm:h-auto sm:flex-1 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -74,8 +75,8 @@ export default function CustomersSummary() {
         </ResponsiveContainer>
       </div>
 
-      <div className="w-50 ml-2 flex flex-col min-h-0">
-        <div className="space-y-2 flex-1 overflow-auto">
+      <div className="w-full sm:w-64 sm:ml-2 flex flex-col min-h-0">
+        <div className="space-y-2 flex-1 overflow-auto overscroll-contain">
           {clusters.map(cluster => (
             <div 
               key={cluster.id} 

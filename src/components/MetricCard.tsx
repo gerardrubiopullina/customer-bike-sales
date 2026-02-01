@@ -17,7 +17,7 @@ export default function MetricCard({
 }: MetricCardProps) {
     return (
         <div className="h-full flex flex-col bg-white rounded-lg shadow-sm">
-            <div className="flex-1 p-4 flex items-center">
+            <div className="flex-1 p-3 lg:p-4 flex items-center">
                 {icon && (
                     <div 
                         className="flex items-center justify-center w-12 h-12 rounded-full mr-4"
