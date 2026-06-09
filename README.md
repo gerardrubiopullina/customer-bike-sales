@@ -47,6 +47,7 @@ Main dashboard features:
 Customers are segmented into **3 clusters** using PAM, Partitioning Around Medoids, with Gower distance. This method is suitable for mixed data because the dataset contains both numerical and categorical variables.
 
 The dashboard also includes a new customer classification flow. A user can enter customer information, and the app sends it to an R Plumber API that assigns the closest cluster and returns a confidence score.
+Note: if the API server has been inactive for more than 20 minutes, the first prediction request may take longer than usual while the service starts again.
 
 This classification is for demonstration purposes: the new customer is not stored in the dataset.
 
