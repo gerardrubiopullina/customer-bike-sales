@@ -10,13 +10,13 @@ This repository focuses on the **dashboard layer** of the project: turning an ex
 
 ## Preview
 
-![Dashboard preview](<img width="1917" height="907" alt="image" src="https://github.com/user-attachments/assets/22ac5894-bf41-4d3b-8b29-98d95d586ea9" />)
+![Dashboard preview](<img width="100%" alt="Bike Sales Analytics Dashboard preview" src="https://github.com/user-attachments/assets/22ac5894-bf41-4d3b-8b29-98d95d586ea9" />)
 
 ## Project Context
 
 The data analysis and customer segmentation were developed in a related Kaggle notebook from my account:
 
-[Clustering and Analysis - Bike Customers](https://www.kaggle.com/code/gerardrubio00/clustering-and-analysis-bike-customers)
+[RELATED KAGGLE NOTEBOOK - Clustering and Analysis bike customers](https://www.kaggle.com/code/gerardrubio00/clustering-and-analysis-bike-customers)
 
 That notebook contains the analytical part of the project. This repository adds the web dashboard, making the results easier to explore and present.
 
